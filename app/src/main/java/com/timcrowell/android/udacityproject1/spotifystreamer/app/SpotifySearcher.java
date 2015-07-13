@@ -1,6 +1,8 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app;
 
 import android.os.AsyncTask;
+import android.util.Log;
+import retrofit.RetrofitError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +50,16 @@ public abstract class SpotifySearcher implements SpotifyAdapterManager {
         @Override
         protected List doInBackground(Void... voids) {
 
-            // This method gets overridden by subclasses and contains networking code.
-            return queryToPerform(query);
+            try {
+
+                // This method gets overridden by subclasses and contains networking code.
+                return queryToPerform(query);
+
+            } catch (RetrofitError error) {
+
+                // Can't connect to Spotify.  Will generate error message in onPostExecute.
+                return null;
+            }
         }
 
         // Once the networking code is run, convert the results into SpotifyListItems.
@@ -58,12 +68,22 @@ public abstract class SpotifySearcher implements SpotifyAdapterManager {
 
             resultsList.clear();
 
-            for (Object object : objects) {
-                resultsList.add(SpotifyListItemFactory.convertApiObjectToSpotifyListItem(object));
-            }
 
-            if (objects.isEmpty()) {
-                resultsList.add(SpotifyListItemFactory.createMessage("No Results Found."));
+            if (objects == null) {
+
+                // If the connection failed, give the user an error message.
+                resultsList.add(SpotifyListItemFactory.createMessage("Unable to Connect to Spotify."));
+
+            } else {
+
+                for (Object object : objects) {
+                    resultsList.add(SpotifyListItemFactory.convertApiObjectToSpotifyListItem(object));
+                }
+
+                // If the connection was successful, but the search returned no results, let the user know.
+                if (objects.isEmpty()) {
+                    resultsList.add(SpotifyListItemFactory.createMessage("No Results Found."));
+                }
             }
 
             updateListAdapter();
@@ -76,7 +96,7 @@ public abstract class SpotifySearcher implements SpotifyAdapterManager {
         listAdapter.clear();
 
         for (SpotifyListItem listItem: resultsList) {
-            listAdapter.add(listItem);
+                listAdapter.add(listItem);
         }
     }
 

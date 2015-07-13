@@ -17,7 +17,7 @@ import java.util.List;
  * SpotifyListAdapters convert SpotifyListItems into a list of views to be diplayed in a ListView.
  * Adding removing items is usually performed by a SpotifyAdapterManager like ArtistSearcher.
  */
-public class SpotifyListAdapter extends ArrayAdapter {
+public class SpotifyListAdapter extends ArrayAdapter<SpotifyListItem> {
     private static final String TAG = SpotifyListAdapter.class.getSimpleName();
 
     private Activity context;
@@ -31,7 +31,7 @@ public class SpotifyListAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        SpotifyListItem spotifyListItem = (SpotifyListItem) getItem(position);
+        SpotifyListItem spotifyListItem = getItem(position);
 
         // If the listItem isn't a message (e.g. error message), choose the appropriate layout.
         // for the music item it represents.
