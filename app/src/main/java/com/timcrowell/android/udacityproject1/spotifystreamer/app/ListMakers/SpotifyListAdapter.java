@@ -1,8 +1,7 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers;
 
 import android.app.Activity;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
 
 /**
  * SpotifyListAdapters convert SpotifyListItems into a list of views to be diplayed in a ListView.

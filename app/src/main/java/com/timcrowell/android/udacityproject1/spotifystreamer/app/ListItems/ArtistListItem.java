@@ -1,10 +1,10 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems;
 
 /**
- * Object that can be inserted into SpotifyListAdapters to provide a message
- * to the user from within the list. Instantiated by SpotifyListItemFactory
+ * Object that represents Artists and stores their relevant metadata.
+ * Instantiated by SpotifyListItemFactory
  */
-public class MessageListItem implements SpotifyListItem {
+public class ArtistListItem implements SpotifyListItem {
 
     private String line1;
     private String line2;
@@ -20,18 +20,14 @@ public class MessageListItem implements SpotifyListItem {
     }
 
     @Override
-    public Type getType() { return Type.MESSAGE; }
+    public SpotifyListItem.Type getType() { return Type.ARTIST; }
 
 
     @Override
-    public String getLine1() {
-        return line1;
-    }
+    public String getLine1() { return line1; }
 
     @Override
-    public String getLine2() {
-        return line2;
-    }
+    public String getLine2() { return line2; }
 
     @Override
     public String getImageUrl() { return image; }

@@ -1,4 +1,4 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
 
         import android.app.Activity;
 
@@ -13,6 +13,12 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.*;
+        import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
+        import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.ArtistSearcher;
+        import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.SpotifyListAdapter;
+        import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.SpotifySearcher;
+        import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
+        import com.timcrowell.android.udacityproject1.spotifystreamer.app.Utils.RetainedFragment;
 
 /**
  * Fragment for searching Spotify.  The search is performed in an EditText at the top

@@ -1,7 +1,8 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers;
 
 import android.os.AsyncTask;
-import android.util.Log;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItemFactory;
 import retrofit.RetrofitError;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems;
 
 /**
  * Object that represents Albums and stores their relevant metadata.

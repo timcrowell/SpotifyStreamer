@@ -1,9 +1,10 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
 
 /**
  * This is a single activity app.  The various screens/layouts will be changed

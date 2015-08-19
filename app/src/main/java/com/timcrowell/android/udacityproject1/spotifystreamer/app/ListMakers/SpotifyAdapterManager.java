@@ -1,4 +1,6 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers;
+
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
 
 import java.util.List;
 
@@ -12,10 +14,10 @@ import java.util.List;
  */
 public interface SpotifyAdapterManager {
 
-    public SpotifyListAdapter getListAdapter();
+    SpotifyListAdapter getListAdapter();
 
-    public void setListAdapter(SpotifyListAdapter listAdapter);
+    void setListAdapter(SpotifyListAdapter listAdapter);
 
-    public List<SpotifyListItem> getListItems();
+    List<SpotifyListItem> getListItems();
 
 }

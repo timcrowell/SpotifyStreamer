@@ -1,4 +1,4 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,6 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.SpotifyListAdapter;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.SpotifySearcher;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.TopTracksSearcher;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Utils.RetainedFragment;
 
 /**
  * This Fragment is used to display a list of items returned from a search.  setQuery(String)

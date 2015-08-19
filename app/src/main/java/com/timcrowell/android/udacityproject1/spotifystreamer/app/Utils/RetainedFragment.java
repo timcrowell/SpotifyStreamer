@@ -1,4 +1,4 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.Utils;
 
 
 import android.support.v4.app.Fragment;

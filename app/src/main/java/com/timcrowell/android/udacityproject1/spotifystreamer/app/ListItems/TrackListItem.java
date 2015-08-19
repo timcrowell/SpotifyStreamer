@@ -1,10 +1,10 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems;
 
 /**
- * Object that represents Artists and stores their relevant metadata.
+ * Object that represents Tracks and stores their relevant metadata.
  * Instantiated by SpotifyListItemFactory
  */
-public class ArtistListItem implements SpotifyListItem {
+public class TrackListItem implements SpotifyListItem {
 
     private String line1;
     private String line2;
@@ -15,26 +15,25 @@ public class ArtistListItem implements SpotifyListItem {
 
 
     @Override
-    public boolean hasTwoLines() {
-        return false;
-    }
+    public boolean hasTwoLines() { return true; }
 
     @Override
-    public SpotifyListItem.Type getType() { return Type.ARTIST; }
+    public SpotifyListItem.Type getType() { return Type.TRACK; }
 
 
     @Override
     public String getLine1() { return line1; }
 
     @Override
-    public String getLine2() { return line2; }
+    public String getLine2() {
+        return line2;
+    }
 
     @Override
     public String getImageUrl() { return image; }
 
     @Override
     public Object getModel() { return model; }
-
     @Override
     public String getId() {return id; }
 
@@ -53,4 +52,5 @@ public class ArtistListItem implements SpotifyListItem {
 
     @Override
     public void setId(String id) { this.id = id; }
+
 }
