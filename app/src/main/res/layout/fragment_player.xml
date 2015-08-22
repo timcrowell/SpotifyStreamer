@@ -1,0 +1,74 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.timcrowell.android.udacityproject1.spotifystreamer.app.UI.PlayerFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:layout_gravity="center">
+
+
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+            <SeekBar
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/seekBar" android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Track Name"
+                    android:id="@+id/textView" android:layout_above="@+id/seekBar"
+                    android:layout_centerHorizontal="true"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Artist Name"
+                    android:id="@+id/textView2" android:layout_above="@+id/textView"
+                    android:layout_centerHorizontal="true"/>
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/imageView" android:layout_above="@+id/textView2"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="15dp" android:layout_marginLeft="20dp" android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"/>
+        </RelativeLayout>
+
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="6">
+            <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:text="Prev"
+                    android:id="@+id/button" android:layout_weight="1"/>
+            <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:text="Play"
+                    android:id="@+id/button2" android:layout_weight="1"/>
+            <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:text="Pause"
+                    android:id="@+id/button3" android:layout_weight="1"/>
+            <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:text="Next"
+                    android:id="@+id/button4" android:layout_weight="1"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

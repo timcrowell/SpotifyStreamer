@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         applicationId "com.timcrowell.android.udacityproject1.spotifystreamer.app"
-        minSdkVersion 9
+        minSdkVersion 11
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"

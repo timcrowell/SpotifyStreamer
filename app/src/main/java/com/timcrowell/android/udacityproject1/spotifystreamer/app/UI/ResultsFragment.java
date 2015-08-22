@@ -1,7 +1,11 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +24,19 @@ import com.timcrowell.android.udacityproject1.spotifystreamer.app.Utils.Retained
 public class ResultsFragment  extends Fragment {
     private static final String TAG = ResultsFragment.class.getSimpleName();
 
+    private FragmentActivity myContext;
+
     private SpotifyListAdapter spotifyListAdapter;
     private SpotifySearcher spotifySearcher;
     private String query;
 
     public ResultsFragment() {
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        myContext = (FragmentActivity) activity;
+        super.onAttach(activity);
     }
 
     // Query gets passed in here from the calling fragment before displaying the fragment.
@@ -71,6 +83,19 @@ public class ResultsFragment  extends Fragment {
 
                 // TODO - Make this launch the player UI rather than toast.
                 Toast.makeText(getActivity(), listItem.getId(), Toast.LENGTH_SHORT).show();
+
+                FragmentManager fragmentManager = myContext.getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+
+                // Create a Fragment to contain results and pass it the query to search for.
+                PlayerFragment playerFragment = new PlayerFragment();
+
+                // Swap this Fragment out with the new one.
+                transaction.replace(R.id.container, playerFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
             }
         });
 
