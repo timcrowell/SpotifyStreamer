@@ -14,8 +14,11 @@ import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.Spot
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.SpotifyListAdapter;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.SpotifySearcher;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.TopTracksSearcher;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.StreamController;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Song;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Utils.RetainedFragment;
+import kaaes.spotify.webapi.android.models.Track;
 
 /**
  * This Fragment is used to display a list of items returned from a search.  setQuery(String)
@@ -82,7 +85,16 @@ public class ResultsFragment  extends Fragment {
                 SpotifyListItem listItem = (SpotifyListItem) view.getTag();
 
                 // TODO - Make this launch the player UI rather than toast.
-                Toast.makeText(getActivity(), listItem.getId(), Toast.LENGTH_SHORT).show();
+                Track track = (Track) listItem.getModel();
+
+
+
+                Song testSong = new Song(track.preview_url, listItem.getLine1(), listItem.getLine2());
+                Toast.makeText(getActivity(), testSong.getTrackUrl(), Toast.LENGTH_SHORT).show();
+
+                StreamController playControlImpl = StreamController.getInstance();
+                playControlImpl.setSong(testSong);
+                playControlImpl.playSong();
 
                 FragmentManager fragmentManager = myContext.getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();

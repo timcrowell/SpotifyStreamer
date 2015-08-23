@@ -1,9 +1,10 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.StreamController;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
 
 /**
@@ -31,6 +32,12 @@ public class MainActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        StreamController.getInstance(getApplicationContext());
     }
 
     // TODO - Add things to options menu.

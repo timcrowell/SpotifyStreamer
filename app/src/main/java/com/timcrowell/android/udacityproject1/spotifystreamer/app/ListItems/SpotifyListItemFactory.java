@@ -50,6 +50,7 @@ public class SpotifyListItemFactory {
             listItem.setLine2("<artist goes here>");
 
             listItem.setId(model.id);
+            listItem.setModel(model);
 
             try {
                 listItem.setImageUrl(model.images.get(0).url);
@@ -68,6 +69,7 @@ public class SpotifyListItemFactory {
             listItem.setLine1(model.name);
             listItem.setLine2(model.album.name);
             listItem.setId(model.id);
+            listItem.setModel(model);
 
             try {
                 listItem.setImageUrl(model.album.images.get(0).url);
