@@ -61,7 +61,9 @@ public class Streamer {
             StreamerService.PlayerBinder binder = (StreamerService.PlayerBinder) iBinder;
             service = binder.getService();
             serviceBound = true;
-            controller = new StreamerController(instance);
+            if (controller == null) {
+                controller = new StreamerController(instance);
+            }
         }
 
         @Override

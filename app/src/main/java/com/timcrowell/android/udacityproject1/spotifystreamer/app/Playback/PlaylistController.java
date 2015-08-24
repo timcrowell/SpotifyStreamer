@@ -12,7 +12,7 @@ public interface PlaylistController {
     public void previous();
     public void next();
     public void stop();
-    public void setPlayList(List<Playable> playlist);
+    public void setPlayList(List<? extends Playable> playlist);
     public void setListItem(int index);
 
     // Redundant with interface android.widget.MediaController.MediaPlayerControl

@@ -24,13 +24,18 @@ public class StreamerController implements MediaController.MediaPlayerControl, P
 
 
     @Override
-    public void setPlayList(List<Playable> playlist) {
-        this.playlist = playlist;
-        setListItem(0);
+    public void setPlayList(List<? extends Playable> playlist) {
+        if ( playlist != null) {
+            this.playlist = (List<Playable>) playlist;
+            setListItem(0);
+        } else {
+            Log.e(TAG, "setPLaylist() Playlist is null.");
+        }
     }
 
     @Override
     public void setListItem(int index) {
+        Log.d(TAG, "Playlist index is: " + index);
         if (songIndex != index) { songIndex = index; }
         currentSong = playlist.get(songIndex);
         seekTo(0);
@@ -91,11 +96,10 @@ public class StreamerController implements MediaController.MediaPlayerControl, P
 
     @Override
     public void start() {
-        if (!isPlaying()) {
-            streamer.service.setSong(currentSong);
-            isSongLoaded = true;
-            seekTo(seekLocation);
-        }
+
+        streamer.service.setSong(currentSong);
+        isSongLoaded = true;
+        seekTo(seekLocation);
     }
 
     @Override

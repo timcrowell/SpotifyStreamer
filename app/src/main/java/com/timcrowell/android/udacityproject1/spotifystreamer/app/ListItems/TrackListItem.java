@@ -1,18 +1,32 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems;
 
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Playable;
+
 /**
  * Object that represents Tracks and stores their relevant metadata.
  * Instantiated by SpotifyListItemFactory
  */
-public class TrackListItem implements SpotifyListItem {
+public class TrackListItem implements SpotifyListItem, Playable {
 
     private String line1;
     private String line2;
     private String image;
     private String id;
+    private String trackUrl;
+    private int playlistIndex;
 
     public Object model;
 
+    public TrackListItem() {
+    }
+
+    public int getPlaylistIndex() {
+        return playlistIndex;
+    }
+
+    public void setPlaylistIndex(int playlistIndex) {
+        this.playlistIndex = playlistIndex;
+    }
 
     @Override
     public boolean hasTwoLines() { return true; }
@@ -37,6 +51,11 @@ public class TrackListItem implements SpotifyListItem {
     @Override
     public String getId() {return id; }
 
+    @Override
+    public String getTrackUrl() { return trackUrl; }
+
+    @Override
+    public void setTrackUrl(String url) { this.trackUrl = url; }
 
     @Override
     public void setLine1(String line1) { this.line1 = line1; }

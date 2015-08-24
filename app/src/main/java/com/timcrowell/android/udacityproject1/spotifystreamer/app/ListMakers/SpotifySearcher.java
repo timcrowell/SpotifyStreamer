@@ -1,8 +1,10 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItemFactory;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.TrackListItem;
 import retrofit.RetrofitError;
 
 import java.util.ArrayList;
@@ -77,8 +79,19 @@ public abstract class SpotifySearcher implements SpotifyAdapterManager {
 
             } else {
 
+                int i = 0;
                 for (Object object : objects) {
-                    resultsList.add(SpotifyListItemFactory.convertApiObjectToSpotifyListItem(object));
+
+                    SpotifyListItem item = SpotifyListItemFactory.convertApiObjectToSpotifyListItem(object);
+
+                    if (item.getType() == SpotifyListItem.Type.TRACK) {
+                        TrackListItem trackItem = (TrackListItem) item;
+                        trackItem.setPlaylistIndex(i);
+                        resultsList.add(trackItem);
+                        i++;
+                    } else {
+                        resultsList.add(item);
+                    }
                 }
 
                 // If the connection was successful, but the search returned no results, let the user know.
@@ -92,12 +105,24 @@ public abstract class SpotifySearcher implements SpotifyAdapterManager {
     }
 
     // Update the SpotifyListAdapter with the new SpotifyListItems.
-    private void updateListAdapter(){
+    private void updateListAdapter() {
 
         listAdapter.clear();
 
-        for (SpotifyListItem listItem: resultsList) {
-                listAdapter.add(listItem);
+        List<TrackListItem> playlist = new ArrayList<TrackListItem>();
+
+        for (SpotifyListItem listItem : resultsList) {
+            listAdapter.add(listItem);
+            if (listItem.getType() == SpotifyListItem.Type.TRACK) {
+                playlist.add((TrackListItem) listItem);
+            }
+        }
+
+        if (playlist == null) {
+            Log.d(TAG, "Playlist is Null");
+        } else {
+            listAdapter.setPlaylistItems(playlist);
+            Log.d(TAG, "Playlist is not null.");
         }
     }
 

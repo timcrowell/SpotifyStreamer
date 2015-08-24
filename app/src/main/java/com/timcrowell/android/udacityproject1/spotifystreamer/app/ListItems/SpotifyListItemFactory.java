@@ -18,13 +18,12 @@ public class SpotifyListItemFactory {
     // so we convert them into our own objects here.
     public static SpotifyListItem convertApiObjectToSpotifyListItem(Object object) {
 
-        SpotifyListItem listItem;
 
         if (object instanceof Artist) {
 
             Artist model = (Artist) object;
 
-            listItem = new ArtistListItem();
+            ArtistListItem listItem= new ArtistListItem();
             listItem.setLine1(model.name);
             listItem.setId(model.id);
             listItem.setModel(model);
@@ -42,7 +41,7 @@ public class SpotifyListItemFactory {
 
             AlbumSimple model = (AlbumSimple) object;
 
-            listItem = new AlbumListItem();
+            AlbumListItem listItem= new AlbumListItem();
             listItem.setLine1(model.name);
 
             // Looks like you can't get the artist of an album from the Spotify Api
@@ -65,11 +64,12 @@ public class SpotifyListItemFactory {
 
             Track model = (Track) object;
 
-            listItem = new TrackListItem();
+            TrackListItem listItem = new TrackListItem();
             listItem.setLine1(model.name);
             listItem.setLine2(model.album.name);
             listItem.setId(model.id);
             listItem.setModel(model);
+            listItem.setTrackUrl(model.preview_url);
 
             try {
                 listItem.setImageUrl(model.album.images.get(0).url);

@@ -6,22 +6,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.TrackListItem;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.SpotifyListAdapter;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.SpotifySearcher;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.TopTracksSearcher;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Playable;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Streamer;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Song;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Utils.RetainedFragment;
-import kaaes.spotify.webapi.android.models.Track;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,36 +80,44 @@ public class ResultsFragment  extends Fragment {
         final ListView listView = (ListView) rootView.findViewById(R.id.listview_searchresults);
         listView.setAdapter(spotifyListAdapter);
 
+
+
         // Handle clicks on list Items
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 SpotifyListItem listItem = (SpotifyListItem) view.getTag();
 
-                // TODO - Make this launch the player UI rather than toast.
-                Track track = (Track) listItem.getModel();
+                if (listItem.getType() == SpotifyListItem.Type.TRACK) {
 
+                    // Build playlist
+                    final List<TrackListItem> playlist = spotifyListAdapter.getPlaylistItems();
+                    Log.d(TAG, "Built Playlist");
+                    if (playlist == null) {
+                        Log.d(TAG, "Playlist is null");
+                    }else {
+                        Log.d(TAG, "Playlist is not null.");
+                    }
 
+                    TrackListItem trackListItem = (TrackListItem) listItem;
 
-                Song testSong = new Song(track.preview_url, listItem.getLine1(), listItem.getLine2());
-                List<Playable> playlist = new ArrayList<Playable>();
-                playlist.add(testSong);
+                    Streamer streamer = Streamer.getInstance();
+                    streamer.controller.setPlayList(playlist);
+                    streamer.controller.setListItem(trackListItem.getPlaylistIndex());
+                    streamer.controller.start();
 
-                Streamer streamer = Streamer.getInstance();
-                streamer.controller.setPlayList(playlist);
-                streamer.controller.start();
+                    FragmentManager fragmentManager = myContext.getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
 
-                FragmentManager fragmentManager = myContext.getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+                    // Create a Fragment to contain results and pass it the query to search for.
+                    PlayerFragment playerFragment = new PlayerFragment();
 
-                // Create a Fragment to contain results and pass it the query to search for.
-                PlayerFragment playerFragment = new PlayerFragment();
-
-                // Swap this Fragment out with the new one.
-                transaction.replace(R.id.container, playerFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                    // Swap this Fragment out with the new one.
+                    transaction.replace(R.id.container, playerFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
 
             }
         });

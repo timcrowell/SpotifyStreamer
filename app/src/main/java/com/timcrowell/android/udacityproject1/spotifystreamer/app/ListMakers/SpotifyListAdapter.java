@@ -2,6 +2,7 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.TrackListItem;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
+import kaaes.spotify.webapi.android.models.Track;
+
+import java.util.List;
 
 /**
  * SpotifyListAdapters convert SpotifyListItems into a list of views to be diplayed in a ListView.
@@ -20,6 +25,23 @@ public class SpotifyListAdapter extends ArrayAdapter<SpotifyListItem> {
     private static final String TAG = SpotifyListAdapter.class.getSimpleName();
 
     private Activity context;
+    private List<TrackListItem> playListItems;
+
+    public void setPlaylistItems(List<TrackListItem> items) {
+        this.playListItems = items;
+        if (playListItems == null) {
+            Log.d(TAG, "setplaylistitems() Playlist is null.");
+        } else {
+            Log.d(TAG, "setplaylistitems() Playlist is not null.");
+        }
+        if (items == null) {
+            Log.d(TAG, "setplaylistitems() ITEMS is null.");
+        } else {
+            Log.d(TAG, "setplaylistitems() ITEMS is not null.");
+        }
+    }
+
+    public List<TrackListItem> getPlaylistItems() { return this.playListItems; }
 
     public SpotifyListAdapter(Activity context) {
         super(context, 0);
