@@ -25,18 +25,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Track Name"
-                    android:id="@+id/textView" android:layout_above="@+id/seekBar"
+                    android:id="@+id/trackName" android:layout_above="@+id/seekBar"
                     android:layout_centerHorizontal="true"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Artist Name"
-                    android:id="@+id/textView2" android:layout_above="@+id/textView"
+                    android:id="@+id/artistName" android:layout_above="@+id/trackName"
                     android:layout_centerHorizontal="true"/>
             <ImageView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:id="@+id/imageView" android:layout_above="@+id/textView2"
+                    android:id="@+id/albumArt" android:layout_above="@+id/artistName"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="15dp" android:layout_marginLeft="20dp" android:layout_marginTop="20dp"
                     android:layout_marginRight="20dp"/>
@@ -52,22 +52,22 @@
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:text="Prev"
-                    android:id="@+id/button" android:layout_weight="1"/>
+                    android:id="@+id/prevButton" android:layout_weight="1"/>
             <Button
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:text="Play"
-                    android:id="@+id/button2" android:layout_weight="1"/>
+                    android:id="@+id/playButton" android:layout_weight="1"/>
             <Button
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:text="Pause"
-                    android:id="@+id/button3" android:layout_weight="1"/>
+                    android:id="@+id/pauseButton" android:layout_weight="1"/>
             <Button
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:text="Next"
-                    android:id="@+id/button4" android:layout_weight="1"/>
+                    android:id="@+id/nextButton" android:layout_weight="1"/>
         </LinearLayout>
 
     </LinearLayout>

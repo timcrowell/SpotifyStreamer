@@ -5,22 +5,14 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems;
  * are used to keep track of individual search results, hold their metadata, and provide
  * SpotifyListAdapters with the info they need to represent each result on the screen.
  */
-public interface SpotifyListItem {
+public abstract class SpotifyListItem {
 
-    String getLine1();
-    String getLine2();
-    String getImageUrl();
-    Object getModel();
-    String getId();
+    private String line1;
+    private String line2;
+    private String image;
+    private String id;
 
-    boolean hasTwoLines();
-    Type getType();
-
-    void setLine1(String line1);
-    void setLine2(String line2);
-    void setImageUrl(String image);
-    void setModel(Object model);
-    void setId(String id);
+    public Object model;
 
     public enum Type {
         ARTIST,
@@ -28,4 +20,34 @@ public interface SpotifyListItem {
         TRACK,
         MESSAGE
     }
+
+
+    public abstract boolean hasTwoLines();
+
+    public SpotifyListItem.Type getType() { return Type.ALBUM; }
+
+    public String getLine1() {
+        return line1;
+    }
+
+    public String getLine2() {
+        return line2;
+    }
+
+    public String getImageUrl() { return image; }
+
+    public Object getModel() { return model; }
+
+    public String getId() {return id; }
+
+
+    public void setLine1(String line1) { this.line1 = line1; }
+
+    public void setLine2(String line2) { this.line2 = line2; }
+
+    public void setImageUrl(String image) { this.image = image; }
+
+    public void setModel(Object model) { this.model = model; }
+
+    public void setId(String id) { this.id = id; }
 }
