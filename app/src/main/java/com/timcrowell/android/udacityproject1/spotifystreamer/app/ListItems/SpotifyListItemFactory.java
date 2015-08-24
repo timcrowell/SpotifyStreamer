@@ -70,6 +70,7 @@ public class SpotifyListItemFactory {
             listItem.setId(model.id);
             listItem.setModel(model);
             listItem.setTrackUrl(model.preview_url);
+            listItem.setArtistName(model.artists.get(0).name);
 
             try {
                 listItem.setImageUrl(model.album.images.get(0).url);

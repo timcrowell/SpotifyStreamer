@@ -99,6 +99,8 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
         player.seekTo(position);
     }
 
+    public void start() {player.start();}
+
     @Override
     public void onCompletion(MediaPlayer mp) {
         // TODO Auto-generated method stub
@@ -113,7 +115,8 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
     @Override
     public void onPrepared(MediaPlayer mp) {
         //start playback
-        mp.start();
+        Streamer streamer = Streamer.getInstance();
+        streamer.controller.onPlayerPrepared();
     }
 
 

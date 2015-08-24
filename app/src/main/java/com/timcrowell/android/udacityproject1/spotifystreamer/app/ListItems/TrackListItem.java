@@ -6,10 +6,11 @@ import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Playa
  * Object that represents Tracks and stores their relevant metadata.
  * Instantiated by SpotifyListItemFactory
  */
-public class TrackListItem extends SpotifyListItem implements Playable {
+public class TrackListItem extends SpotifyListItemImpl implements Playable {
 
     private String trackUrl;
     private int playlistIndex;
+    private String artistName;
 
     @Override
     public boolean hasTwoLines() {
@@ -29,14 +30,19 @@ public class TrackListItem extends SpotifyListItem implements Playable {
         this.playlistIndex = playlistIndex;
     }
 
-    @Override
     public String getTrackUrl() {
         return trackUrl;
     }
 
-    @Override
     public void setTrackUrl(String url) {
         this.trackUrl = url;
     }
 
+    public String getArtistName() {
+        return artistName;
+    }
+
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
+    }
 }

@@ -4,7 +4,6 @@
              android:layout_height="match_parent"
              tools:context="com.timcrowell.android.udacityproject1.spotifystreamer.app.UI.PlayerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
             android:orientation="vertical"
@@ -12,37 +11,50 @@
             android:layout_height="fill_parent" android:layout_gravity="center">
 
 
-        <RelativeLayout
+        <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1">
-            <SeekBar
+                android:layout_height="fill_parent" android:layout_weight="1" android:gravity="bottom">
+            <ImageView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/seekBar" android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"/>
+                    android:id="@+id/albumArt" android:layout_above="@+id/trackName"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="15dp" android:layout_marginLeft="20dp" android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp" android:layout_weight="1"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Track Name"
-                    android:id="@+id/trackName" android:layout_above="@+id/seekBar"
-                    android:layout_centerHorizontal="true"/>
+                    android:id="@+id/trackName" android:layout_above="@+id/artistName"
+                    android:layout_centerHorizontal="true" android:textStyle="bold"
+                    android:layout_gravity="center_horizontal"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Artist Name"
-                    android:id="@+id/artistName" android:layout_above="@+id/trackName"
-                    android:layout_centerHorizontal="true"/>
-            <ImageView
+                    android:id="@+id/artistName" android:layout_above="@+id/progressBar"
+                    android:layout_centerHorizontal="true" android:layout_gravity="center_horizontal"/>
+            <RelativeLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:id="@+id/albumArt" android:layout_above="@+id/artistName"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="15dp" android:layout_marginLeft="20dp" android:layout_marginTop="20dp"
-                    android:layout_marginRight="20dp"/>
-        </RelativeLayout>
-
-
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00:00"
+                        android:id="@+id/positionText" android:layout_alignParentLeft="true" android:padding="10dp"/>
+                <SeekBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/seekBar"
+                        android:layout_toRightOf="@+id/positionText" android:layout_toLeftOf="@+id/durationText"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00:00"
+                        android:id="@+id/durationText" android:layout_alignParentRight="true" android:padding="10dp"/>
+            </RelativeLayout>
+        </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"

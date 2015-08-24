@@ -1,18 +1,9 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems;
 
 /**
- * Interface to derive the various types of list items from.  SpotifyListItem objects
- * are used to keep track of individual search results, hold their metadata, and provide
- * SpotifyListAdapters with the info they need to represent each result on the screen.
+ * Created by tscrowell on 8/24/15.
  */
-public abstract class SpotifyListItem {
-
-    private String line1;
-    private String line2;
-    private String image;
-    private String id;
-
-    public Object model;
+public interface SpotifyListItem {
 
     public enum Type {
         ARTIST,
@@ -21,33 +12,28 @@ public abstract class SpotifyListItem {
         MESSAGE
     }
 
-
     public abstract boolean hasTwoLines();
 
-    public SpotifyListItem.Type getType() { return Type.ALBUM; }
+    public SpotifyListItem.Type getType();
 
-    public String getLine1() {
-        return line1;
-    }
+    public String getLine1();
 
-    public String getLine2() {
-        return line2;
-    }
+    public String getLine2();
 
-    public String getImageUrl() { return image; }
+    public String getImageUrl();
 
-    public Object getModel() { return model; }
+    public Object getModel();
 
-    public String getId() {return id; }
+    public String getId();
 
 
-    public void setLine1(String line1) { this.line1 = line1; }
+    public void setLine1(String line1);
 
-    public void setLine2(String line2) { this.line2 = line2; }
+    public void setLine2(String line2);
 
-    public void setImageUrl(String image) { this.image = image; }
+    public void setImageUrl(String image);
 
-    public void setModel(Object model) { this.model = model; }
+    public void setModel(Object model);
 
-    public void setId(String id) { this.id = id; }
+    public void setId(String id);
 }

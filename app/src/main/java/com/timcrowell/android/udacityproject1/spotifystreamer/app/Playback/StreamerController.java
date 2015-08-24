@@ -2,6 +2,8 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback;
 
 import android.util.Log;
 import android.widget.MediaController;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.TrackListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Utils.Util;
 
 import java.util.List;
 
@@ -12,49 +14,105 @@ public class StreamerController implements MediaController.MediaPlayerControl, P
     private static final String TAG = StreamerController.class.getSimpleName();
 
     private Streamer streamer;
-    private List<Playable> playlist;
+    private List<TrackListItem> playlist;
     private int songIndex = 0;
     private Playable currentSong;
-    private int seekLocation = 0;
-    private boolean isSongLoaded = false;
+    private boolean songIsLoaded = false;
+    private boolean playerIsPrepared = false;
+    private boolean shouldPlay = false;
 
     public StreamerController(Streamer streamer) {
         this.streamer = streamer;
     }
 
+    public void onPlayerPrepared() {
+        Log.d(TAG, "Prepared");
+        playerIsPrepared = true;
+        if (shouldPlay) {
+            start();
+        }
+    }
+
+
+    public String getPositionTime() {
+        Integer posMilli = streamer.controller.getCurrentPosition();
+        if (posMilli != 0) {
+            return Util.getTimeFromMillis(posMilli);
+        } else {
+            return "00:00";
+        }
+    }
+
+    public String getDurationTime() {
+        Integer durMilli = streamer.controller.getDuration();
+        if (durMilli != 0) {
+            return Util.getTimeFromMillis(durMilli);
+        } else {
+            return "00:00";
+        }
+    }
 
     @Override
-    public void setPlayList(List<? extends Playable> playlist) {
+    public Integer getProgress() {
+        Integer duration = getDuration();
+        if (duration != 0) {
+            return 100 * getCurrentPosition() / duration;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public void setProgress(Integer progress) {
+        seekTo(progress * getDuration() / 100);
+    }
+
+    @Override
+    public void setPlaylist(List<TrackListItem> playlist) {
         if ( playlist != null) {
-            this.playlist = (List<Playable>) playlist;
+            this.playlist = playlist;
             setListItem(0);
         } else {
-            Log.e(TAG, "setPLaylist() Playlist is null.");
+            Log.e(TAG, "setPlaylist() Playlist is null.");
         }
     }
 
     @Override
     public void setListItem(int index) {
         Log.d(TAG, "Playlist index is: " + index);
-        if (songIndex != index) { songIndex = index; }
+        songIndex = index;
         currentSong = playlist.get(songIndex);
-        seekTo(0);
+        streamer.service.setSong(currentSong);
+        playerIsPrepared = false;
+        songIsLoaded = true;
+    }
+
+    @Override
+    public TrackListItem getCurrentTrack() {
+        if (playlist != null) {
+            return playlist.get(songIndex);
+        } else {
+            Log.d(TAG, "Playlist is null.");
+            return null;
+        }
     }
 
     @Override
     public void previous() {
 
-        boolean wasPlaying = isPlaying();
+        Log.d(TAG, "Prev Called.");
 
-        if (getCurrentPosition() != 0) {
+        boolean wasPlaying = shouldPlay && isPlaying();
 
-            if (isPlaying()) { pause();}
-            seekTo(0);
+        if (playerIsPrepared && getCurrentPosition() != 0) {
+
+            pause();
+            setProgress(0);
 
         } else {
+
             if (songIndex > 0) {
 
-                if (isPlaying()) { pause();}
                 setListItem(songIndex - 1);
 
             } else {
@@ -68,16 +126,15 @@ public class StreamerController implements MediaController.MediaPlayerControl, P
 
     @Override
     public void next() {
+        Log.d(TAG, "Next called.");
+
         if (playlist.size() > songIndex) {
 
-            boolean wasPlaying = isPlaying();
+            boolean wasPlaying = shouldPlay && isPlaying();
 
-            if (isPlaying()) {
-                pause();
-                setListItem(songIndex + 1);
-            }
+            setListItem(songIndex + 1);
 
-            if (wasPlaying) { start(); }
+            if (wasPlaying) { shouldPlay = true;}
 
         } else {
             Log.d(TAG, "End of playlist.");
@@ -86,9 +143,12 @@ public class StreamerController implements MediaController.MediaPlayerControl, P
 
     @Override
     public void stop() {
+        Log.d(TAG, "Stop called.");
         if (isPlaying()) {
             pause();
-            seekTo(0);
+            setProgress(0);
+        } else if (getProgress() == 0) {
+            setProgress(0);
         } else {
             setListItem(0);
         }
@@ -96,23 +156,27 @@ public class StreamerController implements MediaController.MediaPlayerControl, P
 
     @Override
     public void start() {
-
-        streamer.service.setSong(currentSong);
-        isSongLoaded = true;
-        seekTo(seekLocation);
+        Log.d(TAG, "Start called.");
+        if(songIsLoaded) {
+            shouldPlay = true;
+            if (playerIsPrepared) {
+                streamer.service.start();
+            }
+        }
     }
 
     @Override
     public void pause() {
-        if (isPlaying()) {
-            seekLocation = streamer.service.getPosition();
+        Log.d(TAG, "Pause called");
+        shouldPlay = false;
+        if (playerIsPrepared && isPlaying()) {
             streamer.service.pause();
         }
     }
 
     @Override
     public int getDuration() {
-        if (streamer.isServiceBound()) {
+        if (songIsLoaded && playerIsPrepared) {
             return streamer.service.getDuration();
         } else {
             return 0;
@@ -122,7 +186,7 @@ public class StreamerController implements MediaController.MediaPlayerControl, P
     @Override
     public int getCurrentPosition() {
         if (streamer.isServiceBound()) {
-            return streamer.service.getPosition();
+                return streamer.service.getPosition();
         } else {
             return 0;
         }
@@ -130,7 +194,7 @@ public class StreamerController implements MediaController.MediaPlayerControl, P
 
     @Override
     public void seekTo(int i) {
-        if (isSongLoaded && streamer.isServiceBound() && streamer.service.getPosition() != i) {
+        if (songIsLoaded && playerIsPrepared && streamer.service.getPosition() != i) {
             streamer.service.seek(i);
         }
     }

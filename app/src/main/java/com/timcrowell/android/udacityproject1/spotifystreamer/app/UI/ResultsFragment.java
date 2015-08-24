@@ -90,21 +90,21 @@ public class ResultsFragment  extends Fragment {
 
                 if (listItem.getType() == SpotifyListItem.Type.TRACK) {
 
-                    // Build playlist
-                    final List<TrackListItem> playlist = spotifyListAdapter.getPlaylistItems();
-                    Log.d(TAG, "Built Playlist");
-                    if (playlist == null) {
+                    // Get playlist
+                    List<TrackListItem> playlist = spotifyListAdapter.getPlaylistItems();
+
+                    if (playlist != null) {
+
+                        // Setup Streamer and start playback
+                        Streamer streamer = Streamer.getInstance();
+                        int playlistIndex = ((TrackListItem) listItem).getPlaylistIndex();
+                        streamer.controller.setPlaylist(playlist);
+                        streamer.controller.setListItem(playlistIndex);
+                        streamer.controller.start();
+
+                    } else {
                         Log.d(TAG, "Playlist is null");
-                    }else {
-                        Log.d(TAG, "Playlist is not null.");
                     }
-
-                    TrackListItem trackListItem = (TrackListItem) listItem;
-
-                    Streamer streamer = Streamer.getInstance();
-                    streamer.controller.setPlayList(playlist);
-                    streamer.controller.setListItem(trackListItem.getPlaylistIndex());
-                    streamer.controller.start();
 
                     FragmentManager fragmentManager = myContext.getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
