@@ -2,9 +2,10 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.StreamController;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Streamer;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
 
 /**
@@ -12,6 +13,7 @@ import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
  * via Fragments.
  */
 public class MainActivity extends ActionBarActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,9 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        StreamController.getInstance(getApplicationContext());
+        Log.d(TAG, "We're going to create a Streamer now.");
+        Streamer.getInstance(getApplicationContext());
+        Log.d(TAG,  "We created that Streamer.");
     }
 
     // TODO - Add things to options menu.

@@ -21,7 +21,7 @@
         </activity>
 
         <service
-            android:name=".Playback.StreamingService"
+            android:name=".Playback.StreamerService"
             android:enabled="true"
             android:exported="true" >
         </service>

@@ -12,15 +12,16 @@ import android.util.Log;
 
 import java.io.IOException;
 
-public class StreamingService extends Service implements MediaPlayer.OnPreparedListener,
+public class StreamerService extends Service implements MediaPlayer.OnPreparedListener,
         MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
-    private static final String TAG = StreamingService.class.getSimpleName();
+    private static final String TAG = StreamerService.class.getSimpleName();
 
-    public StreamingService() {
+    public StreamerService() {
+        Log.d(TAG, "Constructor called");
     }
 
     private MediaPlayer player;
-    private Streamable streamable;
+    private Playable playable;
 
     private IBinder playerBinder = new PlayerBinder();
 
@@ -44,8 +45,8 @@ public class StreamingService extends Service implements MediaPlayer.OnPreparedL
 
 
     public class PlayerBinder extends Binder {
-        StreamingService getService() {
-            return StreamingService.this;
+        StreamerService getService() {
+            return StreamerService.this;
         }
     }
 
@@ -61,15 +62,13 @@ public class StreamingService extends Service implements MediaPlayer.OnPreparedL
         return false;
     }
 
-    public void setSong(Streamable streamable) {
+    public void setSong(Playable playable) {
 
-        this.streamable = streamable;
-    }
+        this.playable = playable;
 
-    public void playSong() {
         player.reset();
 
-        Uri trackUri = Uri.parse(streamable.getTrackUrl());
+        Uri trackUri = Uri.parse(playable.getTrackUrl());
 
         try {
             player.setDataSource(getApplicationContext(), trackUri);
@@ -78,6 +77,26 @@ public class StreamingService extends Service implements MediaPlayer.OnPreparedL
         }
 
         player.prepareAsync();
+    }
+
+    public int getPosition(){
+        return player.getCurrentPosition();
+    }
+
+    public int getDuration(){
+        return player.getDuration();
+    }
+
+    public boolean isPlaying(){
+        return player.isPlaying();
+    }
+
+    public void pause(){
+        player.pause();
+    }
+
+    public void seek(int position){
+        player.seekTo(position);
     }
 
     @Override

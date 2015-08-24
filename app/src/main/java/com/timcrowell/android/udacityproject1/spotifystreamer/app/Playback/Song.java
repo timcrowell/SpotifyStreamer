@@ -3,7 +3,7 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback;
 /**
  * Created by tscrowell on 8/22/15.
  */
-public class Song implements Streamable {
+public class Song implements Playable {
     private String trackUrl;
     private String title;
     private String artist;
