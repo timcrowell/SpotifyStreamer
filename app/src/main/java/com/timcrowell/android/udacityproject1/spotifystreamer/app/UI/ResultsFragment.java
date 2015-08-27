@@ -2,10 +2,7 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.*;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,14 +107,33 @@ public class ResultsFragment  extends Fragment {
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
 
-                    // Create a Fragment to contain results and pass it the query to search for.
-                    PlayerFragment playerFragment = new PlayerFragment();
+                    // For phone layouts
+                    if (getView().findViewById(R.id.fragment_results_container) == null) {
 
-                    // Swap this Fragment out with the new one.
-                    transaction.replace(R.id.container, playerFragment);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                        // Create a Fragment to contain results and pass it the query to search for.
+                        PlayerFragment playerFragment = new PlayerFragment();
+
+                        // Swap this Fragment out with the new one.
+                        transaction.replace(R.id.container, playerFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+
+                        // For Tablet Layouts
+                    } else {
+
+                        DialogFragment playerFragment = new PlayerFragment();
+                        playerFragment.show(transaction, "dialog");
+                    }
                 }
+
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+
 
             }
         });

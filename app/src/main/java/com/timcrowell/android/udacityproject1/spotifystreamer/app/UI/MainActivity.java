@@ -15,16 +15,25 @@ import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
 public class MainActivity extends ActionBarActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
 
-            // For now, we'll start the app by loading a SearchFragment
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new SearchFragment())
-                    .commit();
+
+            // If we're using a tablet layout
+            if (findViewById(R.id.fragment_search_container) != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_search_container, new SearchFragment())
+                        .commit();
+                // If this is a phone layout
+            } else {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, new SearchFragment())
+                        .commit();
+            }
         }
     }
 

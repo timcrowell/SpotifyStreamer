@@ -120,10 +120,20 @@ public class SearchFragment  extends Fragment {
                     ResultsFragment resultsFragment = new ResultsFragment();
                     resultsFragment.setQuery(listItem.getId());
 
-                    // Swap this Fragment out with the new one.
-                    transaction.replace(R.id.container, resultsFragment);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                    // For phone layouts
+                    if (getView().findViewById(R.id.fragment_results_container) == null) {
+
+                        transaction.replace(R.id.container, resultsFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+
+                        // For tablet layouts
+                    } else {
+
+                        transaction.replace(R.id.fragment_results_container, resultsFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
                 }
             }
         });
