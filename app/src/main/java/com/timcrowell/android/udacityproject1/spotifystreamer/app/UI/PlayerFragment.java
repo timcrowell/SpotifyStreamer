@@ -29,28 +29,43 @@ public class PlayerFragment extends DialogFragment implements PlayerViewContract
     TrackListItem currentTrack;
     Streamer streamer = Streamer.getInstance();
     SeekBar seekBar;
+    TextView positionTextView;
+    TextView durationTextView;
     Thread seekBarUpdaterThread;
     Boolean fragmentIsVisible = false;
-    String positionText = "00:00";
 
 
     public void startSeekBarUpdater() {
         if (seekBarUpdaterThread == null) {
 
+            // While the dialog is up, this thread just loops in the background ...
             seekBarUpdaterThread = new Thread() {
 
                 @Override
                 public void run() {
+                while (fragmentIsVisible) {
+                    try {
 
-                    while (fragmentIsVisible) {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            Log.d(TAG, "seekUpdater thread interrupted.");
-                        }
-                        seekBar.setProgress(streamer.controller.getProgress());
-                        positionText = streamer.controller.getPositionTime();
+                        // ... and tells the UI thread to update it's views ...
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                // ... with the progress info pulled from the StreamerController ...
+                                seekBar.setProgress(streamer.controller.getProgress());
+                                positionTextView.setText(streamer.controller.getPositionTime());
+                                durationTextView.setText(streamer.controller.getDurationTime());
+
+                            }
+                        });
+
+                        // ... every 0.1 seconds.
+                        Thread.sleep(100);
+
+                    } catch (InterruptedException e) {
+                        Log.d(TAG, "seekUpdater thread interrupted.");
                     }
+                }
                 }
             };
             seekBarUpdaterThread.start();
@@ -73,16 +88,9 @@ public class PlayerFragment extends DialogFragment implements PlayerViewContract
 
         refreshView();
 
-
-
-        // TODO find a different way to make the position TextView refresh automatically
-        // If I do this like the seekbar, android complains about UI on background thread
-//        final TextView positionTextView = (TextView) view.findViewById(R.id.positionText);
-//        TextView durationText = (TextView) view.findViewById(R.id.durationText);
-//        durationText.setText(streamer.controller.getDurationTime());
-
-        SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-        this.seekBar = seekBar;
+        this.seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+        this.positionTextView = (TextView) view.findViewById(R.id.positionText);
+        this.durationTextView = (TextView) view.findViewById(R.id.durationText);
         fragmentIsVisible = true;
         startSeekBarUpdater();
 
