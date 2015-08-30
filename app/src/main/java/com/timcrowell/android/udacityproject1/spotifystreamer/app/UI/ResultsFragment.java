@@ -77,7 +77,13 @@ public class ResultsFragment  extends Fragment {
         final ListView listView = (ListView) rootView.findViewById(R.id.listview_searchresults);
         listView.setAdapter(spotifyListAdapter);
 
-
+        // Are we a phone or a tablet?
+        final boolean isTwoPane;
+        if (getActivity().findViewById(R.id.fragment_results_container) == null) {
+            isTwoPane = false;
+        } else {
+            isTwoPane = true;
+        }
 
         // Handle clicks on list Items
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -108,7 +114,7 @@ public class ResultsFragment  extends Fragment {
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
 
                     // For phone layouts
-                    if (getView().findViewById(R.id.fragment_results_container) == null) {
+                    if (!isTwoPane) {
 
                         // Create a Fragment to contain results and pass it the query to search for.
                         PlayerFragment playerFragment = new PlayerFragment();

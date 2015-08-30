@@ -8,6 +8,7 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
         import android.support.v4.app.FragmentActivity;
         import android.support.v4.app.FragmentTransaction;
         import android.text.InputType;
+        import android.util.Log;
         import android.view.KeyEvent;
         import android.view.LayoutInflater;
         import android.view.View;
@@ -102,6 +103,15 @@ public class SearchFragment  extends Fragment {
         // Attach the ListAdapter to the ListView
         listView.setAdapter(spotifyListAdapter);
 
+        // Are we a phone or a tablet?
+        final boolean isTwoPane;
+        if (getActivity().findViewById(R.id.fragment_results_container) == null) {
+            isTwoPane = false;
+        } else {
+            isTwoPane = true;
+        }
+
+
         // Handle clicks on ListItems here
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -121,7 +131,7 @@ public class SearchFragment  extends Fragment {
                     resultsFragment.setQuery(listItem.getId());
 
                     // For phone layouts
-                    if (getView().findViewById(R.id.fragment_results_container) == null) {
+                    if (!isTwoPane) {
 
                         transaction.replace(R.id.container, resultsFragment);
                         transaction.addToBackStack(null);
