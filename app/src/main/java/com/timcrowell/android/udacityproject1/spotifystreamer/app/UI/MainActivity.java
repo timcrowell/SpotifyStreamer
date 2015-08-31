@@ -1,6 +1,8 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -84,13 +87,24 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()){
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            case R.id.action_settings:
+                return true;
+
+            // Support Up button behavior.
+            case android.R.id.home:
+                FragmentManager fm = getFragmentManager();
+                if (fm.getBackStackEntryCount() > 0) {
+                    Log.d("MainActivity", "Up pressed. Popping fragment backstack.");
+                    fm.popBackStack();
+                } else {
+                    Log.d("MainActivity", "Up pressed. Nothing on fragment backstack, going back instead.");
+                    super.onBackPressed();
+                }
+                return true;
+
         }
-
         return super.onOptionsItemSelected(item);
     }
 
