@@ -43,6 +43,13 @@ public class SearchFragment  extends Fragment {
         super.onAttach(activity);
     }
 
+    @Override
+    public void onResume() {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.showUpButton(false);
+        super.onResume();
+    }
+
     // Stash the ListAdapter in a safe place so we can keep our search results
     // across device rotations.
     @Override

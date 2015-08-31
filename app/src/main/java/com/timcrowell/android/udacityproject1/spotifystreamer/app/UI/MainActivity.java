@@ -1,7 +1,9 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,9 +14,10 @@ import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
  * This is a single activity app.  The various screens/layouts will be changed
  * via Fragments.
  */
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    public boolean isTabletLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,14 +25,19 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
 
-
             // If we're using a tablet layout
             if (findViewById(R.id.fragment_search_container) != null) {
+
+                isTabletLayout = true;
+
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_search_container, new SearchFragment())
                         .commit();
                 // If this is a phone layout
             } else {
+
+                isTabletLayout = false;
+
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.container, new SearchFragment())
                         .commit();
@@ -37,11 +45,28 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    public void showUpButton(boolean shouldShow) {
+        try {
+
+            if (shouldShow) {
+                getSupportActionBar().setHomeButtonEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            } else {
+                getSupportActionBar().setHomeButtonEnabled(false);
+                getSupportActionBar().setDisplayShowHomeEnabled(false);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        } catch (NullPointerException e) {
+            Log.d(TAG, "NPE when getting actionbar.)");
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search, menu);
+        getMenuInflater().inflate(R.menu.main_activity_actions, menu);
         return true;
     }
 

@@ -81,6 +81,8 @@ public class ResultsFragment  extends Fragment {
         final boolean isTwoPane;
         if (getActivity().findViewById(R.id.fragment_results_container) == null) {
             isTwoPane = false;
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.showUpButton(true);
         } else {
             isTwoPane = true;
         }
