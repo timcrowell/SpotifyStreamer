@@ -22,15 +22,18 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean isTabletLayout;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
 
-            // Toolbar replaces the ActionBar
-            Toolbar mToolbar = (Toolbar) findViewById(R.id.spotifyToolbar);
-            setSupportActionBar(mToolbar);
+        // Toolbar replaces the ActionBar
+        toolbar = (Toolbar) findViewById(R.id.spotifyToolbar);
+        setSupportActionBar(toolbar);
+
+        if (savedInstanceState == null) {
 
             // If we're using a tablet layout
             if (findViewById(R.id.fragment_search_container) != null) {
