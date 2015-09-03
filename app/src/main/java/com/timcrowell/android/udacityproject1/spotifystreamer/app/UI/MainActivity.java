@@ -6,6 +6,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
+
+            // Toolbar replaces the ActionBar
+            Toolbar mToolbar = (Toolbar) findViewById(R.id.spotifyToolbar);
+            setSupportActionBar(mToolbar);
 
             // If we're using a tablet layout
             if (findViewById(R.id.fragment_search_container) != null) {
