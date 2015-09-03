@@ -2,6 +2,7 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
 
         import android.app.Activity;
 
+        import android.content.Context;
         import android.os.Bundle;
         import android.support.v4.app.Fragment;
         import android.support.v4.app.FragmentManager;
@@ -13,6 +14,7 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
+        import android.view.inputmethod.InputMethodManager;
         import android.widget.*;
         import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
         import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.ArtistSearcher;
@@ -84,6 +86,9 @@ public class SearchFragment  extends Fragment {
                 // Remember to keep the new query across device orientation changes.
                 RetainedFragment retainedFragment = RetainedFragment.getInstance();
                 retainedFragment.put("SearchFragment_ListAdapter", spotifyListAdapter);
+
+                hideKeyboard();
+
                 return true;
 
             }
@@ -156,5 +161,14 @@ public class SearchFragment  extends Fragment {
         });
 
         return rootView;
+    }
+
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = myContext.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) myContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 }
