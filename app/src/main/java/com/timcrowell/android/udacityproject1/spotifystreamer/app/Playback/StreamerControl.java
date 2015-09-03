@@ -2,16 +2,16 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback;
 
 import android.util.Log;
 import android.widget.MediaController;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.TrackListItem;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.Utils.Util;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.TrackListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.Util;
 
 import java.util.List;
 
 /**
  * Created by tscrowell on 8/23/15.
  */
-public class StreamerController implements MediaController.MediaPlayerControl, PlaylistController {
-    private static final String TAG = StreamerController.class.getSimpleName();
+public class StreamerControl implements MediaController.MediaPlayerControl, PlaylistControl {
+    private static final String TAG = StreamerControl.class.getSimpleName();
 
     private Streamer streamer;
     private List<TrackListItem> playlist;
@@ -21,7 +21,7 @@ public class StreamerController implements MediaController.MediaPlayerControl, P
     private boolean playerIsPrepared = false;
     private boolean shouldPlay = false;
 
-    public StreamerController(Streamer streamer) {
+    public StreamerControl(Streamer streamer) {
         this.streamer = streamer;
     }
 

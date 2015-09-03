@@ -1,4 +1,4 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem;
 
 import android.util.Log;
 import kaaes.spotify.webapi.android.models.AlbumSimple;
@@ -7,7 +7,7 @@ import kaaes.spotify.webapi.android.models.Track;
 
 /**
  * Class with static methods for producing SpotifyListItems. Utilized by
- * SpotifyAdapterManagers like ArtistSearcher.
+ * SpotifyAdapterManagers like ArtistSearch.
  */
 public class SpotifyListItemFactory {
     private static final String TAG = SpotifyListItemFactory.class.getSimpleName();

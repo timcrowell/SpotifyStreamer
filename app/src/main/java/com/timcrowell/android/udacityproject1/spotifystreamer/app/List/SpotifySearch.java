@@ -1,22 +1,22 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.List;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItemFactory;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.TrackListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.SpotifyListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.SpotifyListItemFactory;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.TrackListItem;
 import retrofit.RetrofitError;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * SpotifySearcher provides a wrapper around AsyncTask and is used by the classes that extend
+ * SpotifySearch provides a wrapper around AsyncTask and is used by the classes that extend
  * it to run network code on a background thread, convert the results to SpotifyListItems,
  * and update a SpotifyListAdapter accordingly.
  */
-public abstract class SpotifySearcher implements SpotifyAdapterManager {
-    private static final String TAG = SpotifySearcher.class.getSimpleName();
+public abstract class SpotifySearch implements SpotifyListAdapterProvider {
+    private static final String TAG = SpotifySearch.class.getSimpleName();
 
     private SpotifySearchTask spotifySearchTask;
     private SpotifyListAdapter listAdapter;
@@ -34,7 +34,7 @@ public abstract class SpotifySearcher implements SpotifyAdapterManager {
     @Override
     public List<SpotifyListItem> getListItems() {return resultsList; }
 
-    public SpotifySearcher(SpotifyListAdapter listAdapter){
+    public SpotifySearch(SpotifyListAdapter listAdapter){
         this.listAdapter = listAdapter;
     }
 

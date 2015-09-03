@@ -8,14 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.TrackListItem;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.SpotifyListAdapter;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.SpotifySearcher;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.TopTracksSearcher;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.SpotifyListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.TrackListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.List.SpotifyListAdapter;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.List.SpotifySearch;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.List.TopTrackSearch;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Streamer;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.Utils.RetainedFragment;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.RetainedFragment;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class ResultsFragment  extends Fragment {
     private FragmentActivity myContext;
 
     private SpotifyListAdapter spotifyListAdapter;
-    private SpotifySearcher spotifySearcher;
+    private SpotifySearch spotifySearch;
     private String query;
 
     public ResultsFragment() {
@@ -71,7 +71,7 @@ public class ResultsFragment  extends Fragment {
 
         // Attach the ListAdapter to the Searcher
         // TODO - Make this smarter so it will get more than just top tracks.
-        spotifySearcher = new TopTracksSearcher(spotifyListAdapter);
+        spotifySearch = new TopTrackSearch(spotifyListAdapter);
 
         //Attach the ListAdapter to the List View
         final ListView listView = (ListView) rootView.findViewById(R.id.listview_searchresults);
@@ -148,7 +148,7 @@ public class ResultsFragment  extends Fragment {
 
         // Get the results and display them.
         if (query != null) {
-            spotifySearcher.search(query);
+            spotifySearch.search(query);
         }
 
         return rootView;

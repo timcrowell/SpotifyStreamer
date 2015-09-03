@@ -16,7 +16,7 @@ public class Streamer {
     private static final String TAG = Streamer.class.getSimpleName();
 
     public StreamerService service;
-    public StreamerController controller;
+    public StreamerControl controller;
 
     private Intent playIntent;
     private Context appContext;
@@ -62,7 +62,7 @@ public class Streamer {
             service = binder.getService();
             serviceBound = true;
             if (controller == null) {
-                controller = new StreamerController(instance);
+                controller = new StreamerControl(instance);
             }
         }
 

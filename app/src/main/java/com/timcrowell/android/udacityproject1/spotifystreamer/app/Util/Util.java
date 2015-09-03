@@ -1,4 +1,4 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app.Utils;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.Util;
 
 /**
  * Created by tscrowell on 8/24/15.

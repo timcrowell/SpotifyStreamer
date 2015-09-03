@@ -1,4 +1,4 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
@@ -9,10 +9,10 @@ import java.util.List;
 /**
  * Searches Spotify for Artists and populates a SpotifyListAdapter with the results.
  */
-public class ArtistSearcher extends SpotifySearcher {
-    private static final String TAG = ArtistSearcher.class.getSimpleName();
+public class ArtistSearch extends SpotifySearch {
+    private static final String TAG = ArtistSearch.class.getSimpleName();
 
-    public ArtistSearcher(SpotifyListAdapter adapter) {
+    public ArtistSearch(SpotifyListAdapter adapter) {
         super(adapter);
     }
 

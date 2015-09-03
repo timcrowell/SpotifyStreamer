@@ -1,4 +1,4 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem;
 
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Playable;
 
@@ -6,7 +6,7 @@ import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Playa
  * Object that represents Tracks and stores their relevant metadata.
  * Instantiated by SpotifyListItemFactory
  */
-public class TrackListItem extends SpotifyListItemImpl implements Playable {
+public class TrackListItem extends SpotifyListItemBase implements Playable {
 
     private String trackUrl;
     private int playlistIndex;

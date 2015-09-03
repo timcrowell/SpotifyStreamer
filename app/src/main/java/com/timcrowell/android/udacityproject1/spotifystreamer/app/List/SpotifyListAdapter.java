@@ -1,4 +1,4 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.List;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -10,16 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.TrackListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.SpotifyListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.TrackListItem;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
-import kaaes.spotify.webapi.android.models.Track;
 
 import java.util.List;
 
 /**
  * SpotifyListAdapters convert SpotifyListItems into a list of views to be diplayed in a ListView.
- * Adding removing items is usually performed by a SpotifyAdapterManager like ArtistSearcher.
+ * Adding removing items is usually performed by a SpotifyListAdapterProvider like ArtistSearch.
  */
 public class SpotifyListAdapter extends ArrayAdapter<SpotifyListItem> {
     private static final String TAG = SpotifyListAdapter.class.getSimpleName();

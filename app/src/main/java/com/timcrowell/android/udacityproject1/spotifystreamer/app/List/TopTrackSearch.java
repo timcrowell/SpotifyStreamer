@@ -1,4 +1,4 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.List;
 
 import android.util.Log;
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -11,10 +11,10 @@ import java.util.List;
 /**
  * Searches Spotify for an Artist by ID and populates a SpotifyListAdapter with the artist's top tracks.
  */
-public class TopTracksSearcher extends SpotifySearcher {
-    private static final String TAG = TopTracksSearcher.class.getSimpleName();
+public class TopTrackSearch extends SpotifySearch {
+    private static final String TAG = TopTrackSearch.class.getSimpleName();
 
-    public TopTracksSearcher(SpotifyListAdapter adapter) {
+    public TopTrackSearch(SpotifyListAdapter adapter) {
         super(adapter);
     }
 

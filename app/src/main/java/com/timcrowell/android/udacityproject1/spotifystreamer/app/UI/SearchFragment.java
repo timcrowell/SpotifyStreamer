@@ -9,19 +9,18 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
         import android.support.v4.app.FragmentActivity;
         import android.support.v4.app.FragmentTransaction;
         import android.text.InputType;
-        import android.util.Log;
         import android.view.KeyEvent;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
         import android.view.inputmethod.InputMethodManager;
         import android.widget.*;
-        import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.SpotifyListItem;
-        import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.ArtistSearcher;
-        import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.SpotifyListAdapter;
-        import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListMakers.SpotifySearcher;
+        import com.timcrowell.android.udacityproject1.spotifystreamer.app.List.ArtistSearch;
+        import com.timcrowell.android.udacityproject1.spotifystreamer.app.List.SpotifySearch;
+        import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.SpotifyListItem;
+        import com.timcrowell.android.udacityproject1.spotifystreamer.app.List.SpotifyListAdapter;
         import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
-        import com.timcrowell.android.udacityproject1.spotifystreamer.app.Utils.RetainedFragment;
+        import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.RetainedFragment;
 
 /**
  * Fragment for searching Spotify.  The search is performed in an EditText at the top
@@ -33,7 +32,7 @@ public class SearchFragment  extends Fragment {
 
     private FragmentActivity myContext;
     private SpotifyListAdapter spotifyListAdapter;
-    private SpotifySearcher spotifySearcher;
+    private SpotifySearch spotifySearch;
 
     public SearchFragment(){}
 
@@ -81,7 +80,7 @@ public class SearchFragment  extends Fragment {
 
                 // When the user submits the query, send it to the Searcher.
                 String text = textView.getText().toString();
-                spotifySearcher.search(text);
+                spotifySearch.search(text);
 
                 // Remember to keep the new query across device orientation changes.
                 RetainedFragment retainedFragment = RetainedFragment.getInstance();
@@ -108,7 +107,7 @@ public class SearchFragment  extends Fragment {
 
         // Attach the ListAdapter to the Searcher
         // TODO - Add logic to make this fragment useful for searching for things other than artists
-        spotifySearcher = new ArtistSearcher(spotifyListAdapter);
+        spotifySearch = new ArtistSearch(spotifyListAdapter);
 
         final ListView listView = (ListView) rootView.findViewById(R.id.listview_searchresults);
 

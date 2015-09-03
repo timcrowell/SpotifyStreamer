@@ -16,12 +16,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.squareup.picasso.Picasso;
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.TrackListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.TrackListItem;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Streamer;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
 
 
-public class PlayerFragment extends DialogFragment implements PlayerViewContract {
+public class PlayerFragment extends DialogFragment {
     private static final String TAG = PlayerFragment.class.getSimpleName();
 
     Context myContext;
@@ -51,7 +51,7 @@ public class PlayerFragment extends DialogFragment implements PlayerViewContract
                             @Override
                             public void run() {
 
-                                // ... with the progress info pulled from the StreamerController ...
+                                // ... with the progress info pulled from the StreamerControl ...
                                 seekBar.setProgress(streamer.controller.getProgress());
                                 positionTextView.setText(streamer.controller.getPositionTime());
                                 durationTextView.setText(streamer.controller.getDurationTime());

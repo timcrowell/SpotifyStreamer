@@ -1,14 +1,14 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback;
 
 
-import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems.TrackListItem;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.TrackListItem;
 
 import java.util.List;
 
 /**
  * Created by tscrowell on 8/23/15.
  */
-public interface PlaylistController {
+public interface PlaylistControl {
 
 
     public void previous();

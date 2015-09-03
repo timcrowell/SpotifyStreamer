@@ -1,11 +1,11 @@
-package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItems;
+package com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem;
 
 /**
  * Interface to derive the various types of list items from.  SpotifyListItem objects
  * are used to keep track of individual search results, hold their metadata, and provide
  * SpotifyListAdapters with the info they need to represent each result on the screen.
  */
-public abstract class SpotifyListItemImpl implements SpotifyListItem {
+public abstract class SpotifyListItemBase implements SpotifyListItem {
 
     private String line1;
     private String line2;
