@@ -8,7 +8,7 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:layout_gravity="center">
+            android:layout_height="fill_parent" android:layout_gravity="center" android:minWidth="350dip">
 
 
         <LinearLayout
@@ -21,7 +21,8 @@
                     android:id="@+id/albumArt" android:layout_above="@+id/trackName"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="15dp" android:layout_marginLeft="20dp" android:layout_marginTop="20dp"
-                    android:layout_marginRight="20dp" android:layout_weight="1"/>
+                    android:layout_marginRight="20dp" android:layout_weight="1"
+                    android:nestedScrollingEnabled="true"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -37,49 +38,88 @@
                     android:layout_centerHorizontal="true" android:layout_gravity="center_horizontal"/>
             <RelativeLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content" android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp" android:layout_marginRight="10dp">
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="00:00"
-                        android:id="@+id/positionText" android:layout_alignParentLeft="true" android:padding="10dp"/>
+                        android:layout_alignParentTop="true"
+                        android:id="@+id/positionText" android:layout_alignParentLeft="true" android:padding="10dp"
+                        android:layout_marginBottom="5dp"/>
                 <SeekBar
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/seekBar"
-                        android:layout_toRightOf="@+id/positionText" android:layout_toLeftOf="@+id/durationText"/>
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@+id/positionText" android:layout_toLeftOf="@+id/durationText"
+                        android:layout_marginTop="5dp"/>
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="00:00"
-                        android:id="@+id/durationText" android:layout_alignParentRight="true" android:padding="10dp"/>
+                        android:layout_alignParentTop="true"
+                        android:id="@+id/durationText" android:layout_alignParentRight="true" android:padding="10dp"
+                        android:layout_marginBottom="5dp"/>
             </RelativeLayout>
         </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:gravity="center"
                 android:layout_weight="6">
-            <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:text="Prev"
-                    android:id="@+id/prevButton" android:layout_weight="1"/>
-            <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:text="Play"
-                    android:id="@+id/playButton" android:layout_weight="1"/>
-            <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:text="Pause"
-                    android:id="@+id/pauseButton" android:layout_weight="1"/>
-            <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:text="Next"
-                    android:id="@+id/nextButton" android:layout_weight="1"/>
+            <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="1">
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_rewind"
+                        android:id="@+id/prevButton"
+                        android:layout_marginBottom="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1">
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_play"
+                        android:id="@+id/playButton"
+                        android:layout_marginBottom="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1">
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_pause"
+                        android:id="@+id/pauseButton"
+                        android:layout_marginBottom="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="1">
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_fastforward"
+                        android:id="@+id/nextButton"
+                        android:layout_marginBottom="10dp"/>
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
