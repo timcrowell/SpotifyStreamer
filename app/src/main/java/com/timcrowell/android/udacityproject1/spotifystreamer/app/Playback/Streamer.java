@@ -17,6 +17,7 @@ public class Streamer {
 
     public StreamerService service;
     public StreamerControl controller;
+    public StreamerMonitor monitor;
 
     private Intent playIntent;
     private Context appContext;
@@ -63,6 +64,9 @@ public class Streamer {
             serviceBound = true;
             if (controller == null) {
                 controller = new StreamerControl(instance);
+            }
+            if (monitor == null) {
+                monitor = new StreamerMonitor(instance);
             }
         }
 
