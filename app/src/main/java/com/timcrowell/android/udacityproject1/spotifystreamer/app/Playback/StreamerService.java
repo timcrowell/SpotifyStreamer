@@ -103,12 +103,14 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        // TODO Auto-generated method stub
+        Streamer streamer = Streamer.getInstance();
+        streamer.monitor.refresh();
     }
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        // TODO Auto-generated method stub
+        Streamer streamer = Streamer.getInstance();
+        streamer.monitor.refresh();
         return false;
     }
 
@@ -117,6 +119,7 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
         //start playback
         Streamer streamer = Streamer.getInstance();
         streamer.controller.onPlayerPrepared();
+        streamer.monitor.refresh();
     }
 
 

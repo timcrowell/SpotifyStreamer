@@ -12,17 +12,34 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Streamer;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.Observable;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.Observer;
 
 /**
  * This is a single activity app.  The various screens/layouts will be changed
  * via Fragments.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Observer {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public boolean isTabletLayout;
 
     private Toolbar toolbar;
+    private Menu toolbarMenu;
+    private Streamer streamer;
+    private Observable streamerObservable;
+
+    @Override
+    public void setSubject(Observable subject) {
+        this.streamerObservable = subject;
+    }
+
+    @Override
+    public void update() {
+        MenuItem nowPlaying = toolbarMenu.findItem(R.id.nowPlaying);
+        nowPlaying.setVisible(streamer.service.isPlaying());
+        Log.d(TAG, "update() called: " + streamer.service.isPlaying());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_activity_actions, menu);
+        toolbarMenu = menu;
         return true;
     }
 
@@ -84,9 +102,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "We're going to create a Streamer now.");
-        Streamer.getInstance(getApplicationContext());
-        Log.d(TAG,  "We created that Streamer.");
+        streamer = Streamer.getInstance(getApplicationContext());
+        streamer.monitor.register(this);
     }
 
     // TODO - Add things to options menu.

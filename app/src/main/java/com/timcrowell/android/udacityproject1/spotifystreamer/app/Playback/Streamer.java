@@ -17,7 +17,7 @@ public class Streamer {
 
     public StreamerService service;
     public StreamerControl controller;
-    public StreamerMonitor monitor;
+    public StreamerMonitor monitor = new StreamerMonitor(this);
 
     private Intent playIntent;
     private Context appContext;
@@ -37,12 +37,7 @@ public class Streamer {
 
     public static Streamer getInstance(Context context) {
         if (instance == null) {
-            Log.d(TAG, "createInstance() called.");
             instance = new Streamer(context);
-            Log.d(TAG, "Got to end of creating the instance");
-            if (instance == null) {
-                Log.d(TAG, "Instance is still null");
-            }
         }
         return instance;
     }
@@ -65,9 +60,7 @@ public class Streamer {
             if (controller == null) {
                 controller = new StreamerControl(instance);
             }
-            if (monitor == null) {
-                monitor = new StreamerMonitor(instance);
-            }
+
         }
 
         @Override

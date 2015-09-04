@@ -63,13 +63,14 @@ public class StreamerMonitor implements Observable {
         this.streamer = streamer;
     }
 
-    public void fetchChanges() {
+    public void refresh() {
         boolean wasPlaying = isPlaying;
         boolean nowPlaying = streamer.service.isPlaying();
 
         if (nowPlaying != wasPlaying) {
             this.isPlaying = nowPlaying;
             this.changed = true;
+            Log.d(TAG, "Got changes");
             notifyObservers();
         }
 

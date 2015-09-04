@@ -64,7 +64,9 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
 
     @Override
     public void setProgress(Integer progress) {
+
         seekTo(progress * getDuration() / 100);
+        streamer.monitor.refresh();
     }
 
     @Override
@@ -85,6 +87,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
         streamer.service.setSong(currentSong);
         playerIsPrepared = false;
         songIsLoaded = true;
+        streamer.monitor.refresh();
     }
 
     @Override
@@ -97,6 +100,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
         }
     }
 
+    // TODO - Not working on tablet
     @Override
     public void previous() {
 
@@ -108,6 +112,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
 
             pause();
             setProgress(0);
+            streamer.monitor.refresh();
 
         } else {
 
@@ -136,6 +141,8 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
 
             if (wasPlaying) { shouldPlay = true;}
 
+            streamer.monitor.refresh();
+
         } else {
             Log.d(TAG, "End of playlist.");
         }
@@ -147,6 +154,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
         if (isPlaying()) {
             pause();
             setProgress(0);
+            streamer.monitor.refresh();
         } else if (getProgress() == 0) {
             setProgress(0);
         } else {
@@ -161,6 +169,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
             shouldPlay = true;
             if (playerIsPrepared) {
                 streamer.service.start();
+                streamer.monitor.refresh();
             }
         }
     }
@@ -171,6 +180,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
         shouldPlay = false;
         if (playerIsPrepared && isPlaying()) {
             streamer.service.pause();
+            streamer.monitor.refresh();
         }
     }
 
