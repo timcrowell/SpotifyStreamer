@@ -1,6 +1,7 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         switch (item.getItemId()){
 
             case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
 
             case R.id.nowPlaying:
