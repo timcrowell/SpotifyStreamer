@@ -19,6 +19,7 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.UI;
         import com.timcrowell.android.udacityproject1.spotifystreamer.app.List.SpotifySearch;
         import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.SpotifyListItem;
         import com.timcrowell.android.udacityproject1.spotifystreamer.app.List.SpotifyListAdapter;
+        import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Streamer;
         import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
         import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.RetainedFragment;
 
@@ -48,6 +49,9 @@ public class SearchFragment  extends Fragment {
     public void onResume() {
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.showUpButton(false);
+        if (Streamer.getInstance() != null) {
+            Streamer.getInstance().monitor.forceNotifyObservers();
+        }
         super.onResume();
     }
 
@@ -144,14 +148,14 @@ public class SearchFragment  extends Fragment {
                     // For phone layouts
                     if (!isTwoPane) {
 
-                        transaction.replace(R.id.container, resultsFragment);
+                        transaction.replace(R.id.container, resultsFragment, "RESULTS_FRAGMENT");
                         transaction.addToBackStack(null);
                         transaction.commit();
 
                         // For tablet layouts
                     } else {
 
-                        transaction.replace(R.id.fragment_results_container, resultsFragment);
+                        transaction.replace(R.id.fragment_results_container, resultsFragment, "RESULTS_FRAGMENT");
                         transaction.addToBackStack(null);
                         transaction.commit();
                     }

@@ -41,6 +41,14 @@ public class ResultsFragment  extends Fragment {
         super.onAttach(activity);
     }
 
+    @Override
+    public void onResume() {
+        if (Streamer.getInstance() != null) {
+            Streamer.getInstance().monitor.forceNotifyObservers();
+        }
+        super.onResume();
+    }
+
     // Query gets passed in here from the calling fragment before displaying the fragment.
     public void setQuery(String query) {
         this.query = query;
@@ -122,7 +130,7 @@ public class ResultsFragment  extends Fragment {
                         PlayerFragment playerFragment = new PlayerFragment();
 
                         // Swap this Fragment out with the new one.
-                        transaction.replace(R.id.container, playerFragment);
+                        transaction.replace(R.id.container, playerFragment, "PLAYER_FRAGMENT");
                         transaction.addToBackStack(null);
                         transaction.commit();
 
@@ -130,12 +138,12 @@ public class ResultsFragment  extends Fragment {
                     } else {
 
                         DialogFragment playerFragment = new PlayerFragment();
-                        playerFragment.show(transaction, "dialog");
+                        playerFragment.show(transaction, "PLAYER_FRAGMENT");
                     }
                 }
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                Fragment prev = getFragmentManager().findFragmentByTag("PLAYER_FRAGMENT");
                 if (prev != null) {
                     ft.remove(prev);
                 }

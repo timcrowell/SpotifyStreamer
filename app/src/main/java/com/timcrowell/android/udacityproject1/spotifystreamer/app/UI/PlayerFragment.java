@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -177,6 +178,14 @@ public class PlayerFragment extends DialogFragment {
     public void onPause() {
         super.onPause();
         fragmentIsVisible = false;
+    }
+
+    @Override
+    public void onResume() {
+        if (Streamer.getInstance() != null) {
+            Streamer.getInstance().monitor.forceNotifyObservers();
+        }
+        super.onResume();
     }
 
     @Override

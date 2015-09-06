@@ -42,15 +42,30 @@ public class StreamerMonitor implements Observable {
 
     @Override
     public void notifyObservers() {
+        if (changed) {
+            forceNotifyObservers();
+        }
+    }
+
+    public void forceNotifyObservers() {
         ArrayList<WeakReference<Observer>> mObservers = null;
         synchronized (MUTEX) {
-            if (!changed) { return; }
             mObservers = new ArrayList<WeakReference<Observer>>(this.observers);
             this.changed = false;
         }
         for (WeakReference<Observer> weakReferenceObserver : mObservers) {
-            weakReferenceObserver.get().update();
+
+            if (weakReferenceObserver.get() != null) {
+                weakReferenceObserver.get().update();
+            } else {
+                synchronized (MUTEX) {
+                    this.observers.remove(weakReferenceObserver);
+                }
+                Log.d(TAG, "Removed garbage-collected Observer");
+            }
+
         }
+        Log.d(TAG, "Observers Notified");
     }
 
     @Override
