@@ -18,6 +18,7 @@ public class Streamer {
     public StreamerService service;
     public StreamerControl controller;
     public StreamerMonitor monitor = new StreamerMonitor(this);
+    public StreamerNotification notification = new StreamerNotification(this);
 
     private Intent playIntent;
     private Context appContext;
@@ -60,7 +61,7 @@ public class Streamer {
             if (controller == null) {
                 controller = new StreamerControl(instance);
             }
-
+            notification.buildNotification(notification.generateAction(android.R.drawable.ic_media_play, "Play", "ACTION_PLAY"));
         }
 
         @Override
