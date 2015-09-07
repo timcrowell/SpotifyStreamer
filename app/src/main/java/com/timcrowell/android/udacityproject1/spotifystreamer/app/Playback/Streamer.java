@@ -61,7 +61,7 @@ public class Streamer {
             if (controller == null) {
                 controller = new StreamerControl(instance);
             }
-            notification.buildNotification(notification.generateAction(android.R.drawable.ic_media_play, "Play", "ACTION_PLAY"));
+            notification.ready = true;
         }
 
         @Override
