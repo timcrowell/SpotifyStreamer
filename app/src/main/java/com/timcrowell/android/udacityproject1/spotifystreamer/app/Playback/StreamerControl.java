@@ -20,6 +20,21 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
     private boolean songIsLoaded = false;
     private boolean playerIsPrepared = false;
     private boolean shouldPlay = false;
+    private boolean isStopped = true;
+
+    public boolean isStopped() {
+        return isStopped;
+    }
+
+    public void notifyCompleted() {
+        this.isStopped = true;
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return (isServicePlaying() || shouldPlay);
+    }
+
 
     public StreamerControl(Streamer streamer) {
         this.streamer = streamer;
@@ -106,7 +121,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
 
         Log.d(TAG, "Prev Called.");
 
-        boolean wasPlaying = shouldPlay && isPlaying();
+        boolean wasPlaying = shouldPlay && isServicePlaying();
 
         if (playerIsPrepared && getCurrentPosition() != 0) {
 
@@ -135,7 +150,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
 
         if (playlist.size() > songIndex) {
 
-            boolean wasPlaying = shouldPlay && isPlaying();
+            boolean wasPlaying = shouldPlay && isServicePlaying();
 
             setListItem(songIndex + 1);
 
@@ -151,7 +166,8 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
     @Override
     public void stop() {
         Log.d(TAG, "Stop called.");
-        if (isPlaying()) {
+        if (isServicePlaying()) {
+            isStopped = true;
             pause();
             setProgress(0);
             streamer.monitor.refresh();
@@ -167,6 +183,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
         Log.d(TAG, "Start called.");
         if(songIsLoaded) {
             shouldPlay = true;
+            isStopped = false;
             if (playerIsPrepared) {
                 streamer.service.start();
                 streamer.monitor.refresh();
@@ -178,7 +195,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
     public void pause() {
         Log.d(TAG, "Pause called");
         shouldPlay = false;
-        if (playerIsPrepared && isPlaying()) {
+        if (playerIsPrepared && isServicePlaying()) {
             streamer.service.pause();
             streamer.monitor.refresh();
         }
@@ -209,8 +226,8 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
         }
     }
 
-    @Override
-    public boolean isPlaying() {
+
+    private boolean isServicePlaying() {
         if (streamer.isServiceBound()) {
             return  streamer.service.isPlaying();
         } else {

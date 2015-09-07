@@ -27,6 +27,7 @@ public class StreamerNotification implements Observer{
     private String trackName;
     private String artistName;
     private Bitmap albumArt;
+    private int smallIcon;
     private boolean hasPlayed = false;
 
     public StreamerNotification(Streamer streamer) {
@@ -56,6 +57,14 @@ public class StreamerNotification implements Observer{
                         final TrackListItem trackListItem = streamer.controller.getCurrentTrack();
                         trackName = trackListItem.getLine1();
                         artistName = trackListItem.getArtistName();
+
+                        if (streamer.controller.isStopped()) {
+                            smallIcon = R.drawable.ic_stop;
+                        } else if (streamer.controller.isPlaying()){
+                            smallIcon = R.drawable.ic_play;
+                        } else {
+                            smallIcon = R.drawable.ic_pause;
+                        }
 
                         try {
                             albumArt = Picasso.with(streamer.service).load(Uri.parse(trackListItem.getImageUrl())).get();
@@ -99,7 +108,7 @@ public class StreamerNotification implements Observer{
 //        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(streamer.service);
-        builder.setSmallIcon(R.drawable.ic_play);
+        builder.setSmallIcon(smallIcon);
         builder.setContentTitle(trackName);
         builder.setContentText(artistName);
         builder.setLargeIcon(albumArt);

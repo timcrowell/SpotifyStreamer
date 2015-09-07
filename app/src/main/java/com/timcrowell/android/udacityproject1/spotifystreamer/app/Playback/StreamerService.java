@@ -104,6 +104,7 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
     @Override
     public void onCompletion(MediaPlayer mp) {
         Streamer streamer = Streamer.getInstance();
+        streamer.controller.notifyCompleted();
         streamer.monitor.refresh();
     }
 
