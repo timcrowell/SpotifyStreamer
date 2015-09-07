@@ -61,7 +61,6 @@ public class Streamer {
             if (controller == null) {
                 controller = new StreamerControl(instance);
             }
-            notification.ready = true;
         }
 
         @Override

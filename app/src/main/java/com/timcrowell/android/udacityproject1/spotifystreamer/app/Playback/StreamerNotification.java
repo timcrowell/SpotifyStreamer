@@ -1,9 +1,6 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback;
 
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,12 +24,10 @@ public class StreamerNotification implements Observer{
 
     private Streamer streamer;
     private Observable monitor;
-    private String trackName = "";
-    private String artistName = "";
+    private String trackName;
+    private String artistName;
     private Bitmap albumArt;
-
-
-    public boolean ready = false;
+    private boolean hasPlayed = false;
 
     public StreamerNotification(Streamer streamer) {
 
@@ -45,7 +40,11 @@ public class StreamerNotification implements Observer{
     @Override
     public void update() {
 
-        if (ready) {
+        if (!hasPlayed && streamer.controller != null && streamer.controller.isPlaying()) {
+            hasPlayed = true;
+        }
+
+        if (hasPlayed) {
 
             new Thread() {
                 @Override
@@ -100,7 +99,7 @@ public class StreamerNotification implements Observer{
 //        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(streamer.service);
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setSmallIcon(R.drawable.ic_play);
         builder.setContentTitle(trackName);
         builder.setContentText(artistName);
         builder.setLargeIcon(albumArt);
