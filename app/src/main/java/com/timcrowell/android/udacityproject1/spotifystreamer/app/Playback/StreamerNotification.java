@@ -2,9 +2,11 @@ package com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -42,41 +44,50 @@ public class StreamerNotification implements Observer{
     @Override
     public void update() {
 
+        // This is to make sure the notification doesn't launch before everything has been initialized.
         if (!hasPlayed && streamer.controller != null && streamer.controller.isPlaying()) {
             hasPlayed = true;
         }
-
         if (hasPlayed) {
 
-            new Thread() {
-                @Override
-                public void run() {
-                    Log.d(TAG, "Album art thread Started.");
+            // Check to make sure we're supposed to show notifications.
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(streamer.service.getBaseContext());
+            Boolean showNotification = sharedPreferences.getBoolean("showNotification", true);
+            if (showNotification) {
 
-                    if (! streamer.controller.isStopped()) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "Album art thread Started.");
 
-                        final TrackListItem trackListItem = streamer.controller.getCurrentTrack();
-                        trackName = trackListItem.getLine1();
-                        artistName = trackListItem.getArtistName();
+                        if (!streamer.controller.isStopped()) {
 
-                        if (streamer.controller.isPlaying()) {
-                            smallIcon = R.drawable.ic_play;
+                            final TrackListItem trackListItem = streamer.controller.getCurrentTrack();
+                            trackName = trackListItem.getLine1();
+                            artistName = trackListItem.getArtistName();
+
+                            if (streamer.controller.isPlaying()) {
+                                smallIcon = R.drawable.ic_play;
+                            } else {
+                                smallIcon = R.drawable.ic_pause;
+                            }
+
+                            try {
+                                albumArt = Picasso.with(streamer.service).load(Uri.parse(trackListItem.getImageUrl())).get();
+                            } catch (IOException e) {
+                                albumArt = BitmapFactory.decodeResource(streamer.service.getResources(), R.mipmap.ic_launcher);
+                            }
+
+                            postNotification();
+
                         } else {
-                            smallIcon = R.drawable.ic_pause;
-                        }
 
-                        try {
-                            albumArt = Picasso.with(streamer.service).load(Uri.parse(trackListItem.getImageUrl())).get();
-                        } catch (IOException e) {
-                            albumArt = BitmapFactory.decodeResource(streamer.service.getResources(), R.mipmap.ic_launcher);
+                            // Remove notification when player stops.
+                            remove();
                         }
-
-                        postNotification();
-                    } else {
-                        remove();
                     }
-                }
-            }.start();
+                }.start();
+            }
         }
     }
 
@@ -97,8 +108,6 @@ public class StreamerNotification implements Observer{
 
     public void postNotification() {
         NotificationCompat.MediaStyle style = new NotificationCompat.MediaStyle();
-
-
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(streamer.service);
         builder.setSmallIcon(smallIcon);
