@@ -42,6 +42,14 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
         player.setOnErrorListener(this);
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (Streamer.getInstance().isServiceBound() && Streamer.getInstance().controller != null) {
+            Streamer.getInstance().controller.handleIntent(intent);
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
+
 
 
     public class PlayerBinder extends Binder {

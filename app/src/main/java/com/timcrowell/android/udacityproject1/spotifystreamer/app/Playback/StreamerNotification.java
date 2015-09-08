@@ -11,6 +11,7 @@ import android.util.Log;
 import com.squareup.picasso.Picasso;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.TrackListItem;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.UI.MainActivity;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.Observable;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.Observer;
 
@@ -52,15 +53,13 @@ public class StreamerNotification implements Observer{
                 public void run() {
                     Log.d(TAG, "Album art thread Started.");
 
-                    try {
+                    if (! streamer.controller.isStopped()) {
 
                         final TrackListItem trackListItem = streamer.controller.getCurrentTrack();
                         trackName = trackListItem.getLine1();
                         artistName = trackListItem.getArtistName();
 
-                        if (streamer.controller.isStopped()) {
-                            smallIcon = R.drawable.ic_stop;
-                        } else if (streamer.controller.isPlaying()){
+                        if (streamer.controller.isPlaying()) {
                             smallIcon = R.drawable.ic_play;
                         } else {
                             smallIcon = R.drawable.ic_pause;
@@ -72,15 +71,10 @@ public class StreamerNotification implements Observer{
                             albumArt = BitmapFactory.decodeResource(streamer.service.getResources(), R.mipmap.ic_launcher);
                         }
 
-                    } catch (NullPointerException e) {
-
-                        trackName = "Select a track.";
-                        artistName = "";
-                        albumArt = BitmapFactory.decodeResource(streamer.service.getResources(), R.mipmap.ic_launcher);
-
+                        postNotification();
+                    } else {
+                        remove();
                     }
-
-                    buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", "ACTION_PLAY"));
                 }
             }.start();
         }
@@ -92,30 +86,53 @@ public class StreamerNotification implements Observer{
         this.monitor = subject;
     }
 
-    public NotificationCompat.Action generateAction( int icon, String title, String intentAction ) {
-        Intent intent = new Intent( streamer.service, StreamerService.class );
+
+    private NotificationCompat.Action generateAction( int icon, String title, String intentAction ) {
+        Intent intent = new Intent(streamer.service, StreamerService.class );
         intent.setAction( intentAction );
         PendingIntent pendingIntent = PendingIntent.getService(streamer.service, 1, intent, 0);
         return new NotificationCompat.Action.Builder( icon, title, pendingIntent ).build();
     }
 
 
-    public void buildNotification( NotificationCompat.Action action ) {
+    public void postNotification() {
         NotificationCompat.MediaStyle style = new NotificationCompat.MediaStyle();
 
-//        Intent intent = new Intent(getApplicationContext(), MediaPlayerService.class);
-//        intent.setAction(ACTION_STOP);
-//        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
+
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(streamer.service);
         builder.setSmallIcon(smallIcon);
         builder.setContentTitle(trackName);
         builder.setContentText(artistName);
         builder.setLargeIcon(albumArt);
-//        builder.setDeleteIntent(pendingIntent);
         builder.setStyle(style);
 
+        Intent contentIntent = new Intent(streamer.service, MainActivity.class);
+        contentIntent.setAction(MainActivity.ACTION_DISPLAYPLAYER);
+        PendingIntent pendingContentIntent = PendingIntent.getActivity(streamer.service.getApplicationContext(), 1, contentIntent, 0);
+        builder.setContentIntent(pendingContentIntent);
+
+        Intent deleteIntent = new Intent(streamer.service, StreamerService.class);
+        deleteIntent.setAction(StreamerControl.ACTION_STOP);
+        PendingIntent pendingDeleteIntent = PendingIntent.getService(streamer.service, 1, deleteIntent, 0);
+        builder.setDeleteIntent(pendingDeleteIntent);
+
+        builder.addAction(generateAction(R.drawable.ic_rewind, "Previous", StreamerControl.ACTION_PREVIOUS));
+
+        if (streamer.controller.isPlaying()) {
+            builder.addAction(generateAction(R.drawable.ic_pause, "Pause", StreamerControl.ACTION_PAUSE));
+        } else {
+            builder.addAction(generateAction(R.drawable.ic_play, "Play", StreamerControl.ACTION_PLAY));
+        }
+
+        builder.addAction(generateAction(R.drawable.ic_fastforward, "Next", StreamerControl.ACTION_NEXT));
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(streamer.service);
         notificationManager.notify( 1, builder.build() );
     }
+
+    public void remove() {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(streamer.service);
+        notificationManager.cancel(1);
+    }
+
 }

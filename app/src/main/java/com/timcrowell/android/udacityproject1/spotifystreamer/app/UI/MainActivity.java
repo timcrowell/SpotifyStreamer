@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     public boolean isTabletLayout;
 
+    public static final String ACTION_DISPLAYPLAYER = "Display Player";
+
     private Toolbar toolbar;
     private Menu toolbarMenu;
     private Streamer streamer;
@@ -91,6 +93,11 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         // Make sure to continue showing Now Playing button if activity has been restarted.
         if (streamer != null) { streamer.monitor.notifyObservers(); }
+
+        // Open up player if we're coming from the notification.
+        if (getIntent().getAction() == ACTION_DISPLAYPLAYER) {
+            displayPlayerFragment();
+        }
     }
 
     public void showUpButton(boolean shouldShow) {
@@ -148,30 +155,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 return true;
 
             case R.id.nowPlaying:
-
-                hideKeyboard();
-
-                FragmentManager fragmentManager = this.getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-
-                // For phone layouts
-                if (!isTabletLayout) {
-
-                    // Create a Fragment to contain results and pass it the query to search for.
-                    PlayerFragment playerFragment = new PlayerFragment();
-
-                    // Swap this Fragment out with the new one.
-                    transaction.replace(R.id.container, playerFragment, "PLAYER_FRAGMENT");
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-
-                    // For Tablet Layouts
-                } else {
-
-                    DialogFragment playerFragment = new PlayerFragment();
-                    playerFragment.show(transaction, "PLAYER_FRAGMENT");
-                }
+                displayPlayerFragment();
                 return true;
 
             // Support Up button behavior.
@@ -196,6 +180,33 @@ public class MainActivity extends AppCompatActivity implements Observer {
         if (view != null) {
             InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    public void displayPlayerFragment() {
+
+        hideKeyboard();
+
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+
+        // For phone layouts
+        if (!isTabletLayout) {
+
+            // Create a Fragment to contain results and pass it the query to search for.
+            PlayerFragment playerFragment = new PlayerFragment();
+
+            // Swap this Fragment out with the new one.
+            transaction.replace(R.id.container, playerFragment, "PLAYER_FRAGMENT");
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+            // For Tablet Layouts
+        } else {
+
+            DialogFragment playerFragment = new PlayerFragment();
+            playerFragment.show(transaction, "PLAYER_FRAGMENT");
         }
     }
 }

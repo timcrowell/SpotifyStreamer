@@ -1,5 +1,6 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback;
 
+import android.content.Intent;
 import android.util.Log;
 import android.widget.MediaController;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.TrackListItem;
@@ -21,6 +22,32 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
     private boolean playerIsPrepared = false;
     private boolean shouldPlay = false;
     private boolean isStopped = true;
+
+    public static final String ACTION_PLAY = "action_play";
+    public static final String ACTION_PAUSE = "action_pause";
+    public static final String ACTION_NEXT = "action_next";
+    public static final String ACTION_PREVIOUS = "action_previous";
+    public static final String ACTION_STOP = "action_stop";
+
+
+    public void handleIntent(Intent intent) {
+        Log.d(TAG, "Handling Intent");
+        if (intent == null || intent.getAction() == null) return;
+
+        String action = intent.getAction();
+
+        if( action.equalsIgnoreCase( ACTION_PLAY ) ) {
+            start();
+        } else if( action.equalsIgnoreCase( ACTION_PAUSE ) ) {
+            pause();
+        } else if( action.equalsIgnoreCase( ACTION_PREVIOUS ) ) {
+            previous();
+        } else if( action.equalsIgnoreCase( ACTION_NEXT ) ) {
+            next();
+        } else if( action.equalsIgnoreCase( ACTION_STOP ) ) {
+            stop();
+        }
+    }
 
     public boolean isStopped() {
         return isStopped;
@@ -167,9 +194,9 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
     public void stop() {
         Log.d(TAG, "Stop called.");
         if (isServicePlaying()) {
-            isStopped = true;
-            pause();
             setProgress(0);
+            pause();
+            isStopped = true;
             streamer.monitor.refresh();
         } else if (getProgress() == 0) {
             setProgress(0);
