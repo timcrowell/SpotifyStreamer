@@ -71,10 +71,12 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
     }
 
     public void setSong(Playable playable) {
+        Log.d(TAG, "setSong() called.");
 
         this.playable = playable;
 
         player.reset();
+
 
         Uri trackUri = Uri.parse(playable.getTrackUrl());
 
@@ -84,6 +86,7 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
             Log.e(TAG, "Error setting data source", e);
         }
 
+        Log.d(TAG, "Calling prepareAsync()");
         player.prepareAsync();
     }
 
@@ -113,22 +116,22 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
     public void onCompletion(MediaPlayer mp) {
         Streamer streamer = Streamer.getInstance();
         streamer.controller.notifyCompleted();
-        streamer.monitor.refresh();
     }
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
         Streamer streamer = Streamer.getInstance();
         streamer.monitor.refresh();
+        Log.d(TAG, "OnError reached.");
         return false;
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
         //start playback
+        Log.d(TAG, "Informing the StreamerController we're ready.");
         Streamer streamer = Streamer.getInstance();
         streamer.controller.onPlayerPrepared();
-        streamer.monitor.refresh();
     }
 
 

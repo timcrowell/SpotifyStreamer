@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Streamer;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.Observable;
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
                     || getSupportFragmentManager().findFragmentByTag("PLAYER_FRAGMENT") == null
                     || ! getSupportFragmentManager().findFragmentByTag("PLAYER_FRAGMENT").isVisible() )
             {
-                nowPlaying.setVisible(streamer.service.isPlaying());
+                nowPlaying.setVisible(streamer.controller.isPlaying());
             } else {
                 nowPlaying.setVisible(false);
             }
@@ -125,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         toolbarMenu = menu;
 
         // Double-check Now-Playing after rotation
-        streamer.monitor.forceNotifyObservers();
+        streamer.monitor.notifyObservers();
         return true;
     }
 

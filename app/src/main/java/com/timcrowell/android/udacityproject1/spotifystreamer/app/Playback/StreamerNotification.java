@@ -1,5 +1,6 @@
 package com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback;
 
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -58,7 +59,7 @@ public class StreamerNotification implements Observer{
                 new Thread() {
                     @Override
                     public void run() {
-                        Log.d(TAG, "Album art thread Started.");
+                        Log.d(TAG, "Updating notification on background thread.");
 
                         if (!streamer.controller.isStopped()) {
 
@@ -136,10 +137,14 @@ public class StreamerNotification implements Observer{
 
         builder.addAction(generateAction(R.drawable.ic_fastforward, "Next", StreamerControl.ACTION_NEXT));
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(streamer.service);
-        notificationManager.notify( 1, builder.build() );
+        Notification notification = builder.build();
+        notificationManager.notify( 1, notification );
+        streamer.service.startForeground(1, notification);
     }
 
     public void remove() {
+        Log.d(TAG, "Removing Notification");
+        streamer.service.stopForeground(true);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(streamer.service);
         notificationManager.cancel(1);
     }

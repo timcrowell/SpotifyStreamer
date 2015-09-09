@@ -44,7 +44,7 @@ public class ResultsFragment  extends Fragment {
     @Override
     public void onResume() {
         if (Streamer.getInstance() != null) {
-            Streamer.getInstance().monitor.forceNotifyObservers();
+            Streamer.getInstance().monitor.notifyObservers();
         }
         super.onResume();
     }

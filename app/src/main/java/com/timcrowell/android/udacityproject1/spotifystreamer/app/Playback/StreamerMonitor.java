@@ -40,14 +40,9 @@ public class StreamerMonitor implements Observable {
         }
     }
 
+
     @Override
     public void notifyObservers() {
-        if (changed) {
-            forceNotifyObservers();
-        }
-    }
-
-    public void forceNotifyObservers() {
         ArrayList<WeakReference<Observer>> mObservers = null;
         synchronized (MUTEX) {
             mObservers = new ArrayList<WeakReference<Observer>>(this.observers);
@@ -79,16 +74,16 @@ public class StreamerMonitor implements Observable {
     }
 
     public void refresh() {
-        boolean wasPlaying = isPlaying;
-        boolean nowPlaying = streamer.service.isPlaying();
-
-        if (nowPlaying != wasPlaying) {
-            this.isPlaying = nowPlaying;
-            this.changed = true;
-            Log.d(TAG, "Got changes");
-            notifyObservers();
-        }
-
+//        boolean wasPlaying = isPlaying;
+//        boolean nowPlaying = streamer.service.isPlaying();
+//
+//        if (nowPlaying != wasPlaying) {
+//            this.isPlaying = nowPlaying;
+//            this.changed = true;
+//            Log.d(TAG, "Got changes");
+//            notifyObservers();
+//        }
+        notifyObservers();
     }
 
 

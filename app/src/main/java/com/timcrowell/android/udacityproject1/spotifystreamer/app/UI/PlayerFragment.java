@@ -11,18 +11,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.TrackListItem;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Streamer;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.Observable;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.Observer;
 
 
-public class PlayerFragment extends DialogFragment {
+public class PlayerFragment extends DialogFragment implements Observer {
     private static final String TAG = PlayerFragment.class.getSimpleName();
 
     Context myContext;
@@ -34,6 +34,8 @@ public class PlayerFragment extends DialogFragment {
     TextView durationTextView;
     Thread seekBarUpdaterThread;
     Boolean fragmentIsVisible = false;
+
+    private Observable monitor;
 
 
     public void startSeekBarUpdater() {
@@ -113,7 +115,6 @@ public class PlayerFragment extends DialogFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(myContext, "Seek " + seekBar.getProgress(), Toast.LENGTH_SHORT).show();
                 streamer.controller.setProgress(seekBar.getProgress());
             }
         });
@@ -152,26 +153,36 @@ public class PlayerFragment extends DialogFragment {
             }
         });
 
-
-
+        streamer.monitor.register(this);
 
         return view;
     }
 
     private void refreshView() {
 
-        Streamer streamer = Streamer.getInstance();
+        TrackListItem prevTrack = currentTrack;
         currentTrack = streamer.controller.getCurrentTrack();
 
-        final TextView artistText = (TextView) myView.findViewById(R.id.artistName);
-        artistText.setText(currentTrack.getArtistName());
+        if (currentTrack != prevTrack) {
+            final TextView artistText = (TextView) myView.findViewById(R.id.artistName);
+            artistText.setText(currentTrack.getArtistName());
 
-        final TextView trackText = (TextView) myView.findViewById(R.id.trackName);
-        trackText.setText(currentTrack.getLine1());
+            final TextView trackText = (TextView) myView.findViewById(R.id.trackName);
+            trackText.setText(currentTrack.getLine1());
 
-        ImageView albumArtView = (ImageView) myView.findViewById(R.id.albumArt);
-        Picasso.with(myContext).load(Uri.parse(currentTrack.getImageUrl())).into(albumArtView);
+            ImageView albumArtView = (ImageView) myView.findViewById(R.id.albumArt);
+            Picasso.with(myContext).load(Uri.parse(currentTrack.getImageUrl())).into(albumArtView);
+        }
+    }
 
+    @Override
+    public void update() {
+        refreshView();
+    }
+
+    @Override
+    public void setSubject(Observable subject) {
+        this.monitor = subject;
     }
 
     @Override
@@ -183,7 +194,7 @@ public class PlayerFragment extends DialogFragment {
     @Override
     public void onResume() {
         if (Streamer.getInstance() != null) {
-            Streamer.getInstance().monitor.forceNotifyObservers();
+            Streamer.getInstance().monitor.notifyObservers();
         }
         super.onResume();
     }

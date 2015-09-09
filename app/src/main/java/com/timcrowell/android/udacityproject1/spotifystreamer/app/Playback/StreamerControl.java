@@ -54,7 +54,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
     }
 
     public void notifyCompleted() {
-        this.isStopped = true;
+        next();
     }
 
     @Override
@@ -98,7 +98,8 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
     public Integer getProgress() {
         Integer duration = getDuration();
         if (duration != 0) {
-            return 100 * getCurrentPosition() / duration;
+            int progress = 100 * getCurrentPosition() / duration;
+            return progress;
         } else {
             return 0;
         }
@@ -126,6 +127,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
         Log.d(TAG, "Playlist index is: " + index);
         songIndex = index;
         currentSong = playlist.get(songIndex);
+        Log.d(TAG, "Calling setSong()");
         streamer.service.setSong(currentSong);
         playerIsPrepared = false;
         songIsLoaded = true;
@@ -142,19 +144,15 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
         }
     }
 
-    // TODO - Not working on tablet
+
     @Override
     public void previous() {
 
         Log.d(TAG, "Prev Called.");
 
-        boolean wasPlaying = shouldPlay && isServicePlaying();
+        if (playerIsPrepared && getProgress() > 1) {
 
-        if (playerIsPrepared && getCurrentPosition() != 0) {
-
-            pause();
             setProgress(0);
-            streamer.monitor.refresh();
 
         } else {
 
@@ -165,40 +163,33 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
             } else {
 
                 Log.d(TAG, "At beginning of playlist.");
+                stop();
 
             }
         }
-        if (wasPlaying) { start(); }
     }
 
     @Override
     public void next() {
         Log.d(TAG, "Next called.");
 
-        if (playlist.size() > songIndex) {
-
-            boolean wasPlaying = shouldPlay && isServicePlaying();
-
+        if (playlist.size() > songIndex + 1) {
             setListItem(songIndex + 1);
-
-            if (wasPlaying) { shouldPlay = true;}
-
-            streamer.monitor.refresh();
-
         } else {
             Log.d(TAG, "End of playlist.");
+            stop();
+            setListItem(0);
         }
     }
 
     @Override
     public void stop() {
         Log.d(TAG, "Stop called.");
-        if (isServicePlaying()) {
-            setProgress(0);
-            pause();
-            isStopped = true;
-            streamer.monitor.refresh();
-        } else if (getProgress() == 0) {
+        shouldPlay = false;
+        streamer.service.pause();
+        isStopped = true;
+
+        if (getProgress() != 0) {
             setProgress(0);
         } else {
             setListItem(0);
@@ -208,13 +199,15 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
     @Override
     public void start() {
         Log.d(TAG, "Start called.");
+        Log.d(TAG, "ShouldPlay: " + shouldPlay + " IsStopped: " + isStopped + " PlayerIsPreppared: " + playerIsPrepared +
+                " isPlaying: " + streamer.service.isPlaying() + " songIsLoaded: " + songIsLoaded);
         if(songIsLoaded) {
             shouldPlay = true;
             isStopped = false;
             if (playerIsPrepared) {
                 streamer.service.start();
-                streamer.monitor.refresh();
             }
+            streamer.monitor.refresh();
         }
     }
 
@@ -224,8 +217,8 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
         shouldPlay = false;
         if (playerIsPrepared && isServicePlaying()) {
             streamer.service.pause();
-            streamer.monitor.refresh();
         }
+        streamer.monitor.refresh();
     }
 
     @Override

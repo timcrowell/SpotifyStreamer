@@ -65,6 +65,7 @@ public class Streamer {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+            Log.d(TAG, "StreamerService Disconnected.");
             serviceBound = false;
         }
     };

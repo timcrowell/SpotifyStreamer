@@ -50,7 +50,7 @@ public class SearchFragment  extends Fragment {
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.showUpButton(false);
         if (Streamer.getInstance() != null) {
-            Streamer.getInstance().monitor.forceNotifyObservers();
+            Streamer.getInstance().monitor.notifyObservers();
         }
         super.onResume();
     }
