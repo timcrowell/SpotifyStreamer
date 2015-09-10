@@ -10,6 +10,4 @@ public interface Observable {
 
     public void notifyObservers();
 
-    public Object getUpdate(Observer observer);
-
 }

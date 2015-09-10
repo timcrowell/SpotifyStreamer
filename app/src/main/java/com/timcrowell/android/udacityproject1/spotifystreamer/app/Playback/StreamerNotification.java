@@ -56,6 +56,7 @@ public class StreamerNotification implements Observer{
             Boolean showNotification = sharedPreferences.getBoolean("showNotification", true);
             if (showNotification) {
 
+                // Android complains about network on UI thread if we don't run Picasso in it's own thread.
                 new Thread() {
                     @Override
                     public void run() {
@@ -117,29 +118,41 @@ public class StreamerNotification implements Observer{
         builder.setLargeIcon(albumArt);
         builder.setStyle(style);
 
+        // If user clicks on the notification, take them back to the PlayerFragment in the app.
         Intent contentIntent = new Intent(streamer.service, MainActivity.class);
         contentIntent.setAction(MainActivity.ACTION_DISPLAYPLAYER);
         PendingIntent pendingContentIntent = PendingIntent.getActivity(streamer.service.getApplicationContext(), 1, contentIntent, 0);
         builder.setContentIntent(pendingContentIntent);
 
+        // If this isn't a ForegroundService, (streamer isn't playing) swiping away the notification causes playback to stop.
         Intent deleteIntent = new Intent(streamer.service, StreamerService.class);
         deleteIntent.setAction(StreamerControl.ACTION_STOP);
         PendingIntent pendingDeleteIntent = PendingIntent.getService(streamer.service, 1, deleteIntent, 0);
         builder.setDeleteIntent(pendingDeleteIntent);
 
+        // Add buttons to notification that post Intents to control playback
         builder.addAction(generateAction(R.drawable.ic_rewind, "Previous", StreamerControl.ACTION_PREVIOUS));
-
         if (streamer.controller.isPlaying()) {
             builder.addAction(generateAction(R.drawable.ic_pause, "Pause", StreamerControl.ACTION_PAUSE));
         } else {
             builder.addAction(generateAction(R.drawable.ic_play, "Play", StreamerControl.ACTION_PLAY));
         }
-
         builder.addAction(generateAction(R.drawable.ic_fastforward, "Next", StreamerControl.ACTION_NEXT));
+
+        // Create notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(streamer.service);
         Notification notification = builder.build();
-        notificationManager.notify( 1, notification );
-        streamer.service.startForeground(1, notification);
+
+        // If music is playing, we want the service in the foreground so Android doesn't kill it.
+        // This has the side effect of making the notification un-removable.
+        if (streamer.controller.isPlaying()) {
+            streamer.service.startForeground(1, notification);
+        } else {
+            streamer.service.stopForeground(true);
+        }
+
+        // Display notification
+        notificationManager.notify(1, notification);
     }
 
     public void remove() {

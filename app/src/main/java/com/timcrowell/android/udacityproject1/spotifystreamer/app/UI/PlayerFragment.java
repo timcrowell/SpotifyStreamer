@@ -97,8 +97,6 @@ public class PlayerFragment extends DialogFragment implements Observer {
         fragmentIsVisible = true;
         startSeekBarUpdater();
 
-
-        final Integer seekPosition = seekBar.getProgress();
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             Streamer streamer = Streamer.getInstance();
@@ -175,6 +173,7 @@ public class PlayerFragment extends DialogFragment implements Observer {
         }
     }
 
+    // Called by the StreamerMonitor when the track changes, etc.
     @Override
     public void update() {
         refreshView();

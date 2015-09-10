@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     public boolean isTabletLayout;
 
+    // Used when the user clicks on the notification to come back to the PlayerFragment.
     public static final String ACTION_DISPLAYPLAYER = "Display Player";
 
     private Toolbar toolbar;
@@ -39,9 +40,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
         this.streamerObservable = subject;
     }
 
+    // Handle displaying the NowPlaying button
     @Override
     public void update() {
-
         if (toolbarMenu != null) {
             MenuItem nowPlaying = toolbarMenu.findItem(R.id.nowPlaying);
 
@@ -141,12 +142,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
         streamer.monitor.register(this);
     }
 
-    // TODO - Add things to options menu.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()){
 
             case R.id.action_settings:
@@ -161,10 +158,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
             case android.R.id.home:
                 FragmentManager fm = getSupportFragmentManager();
                 if (fm.getBackStackEntryCount() > 0) {
-                    Log.d("MainActivity", "Up pressed. Popping fragment backstack.");
                     fm.popBackStack();
                 } else {
-                    Log.d("MainActivity", "Up pressed. Nothing on fragment backstack, going back instead.");
+                    // Up pressed, but there's nothing on the fragment backstack, going back instead
                     super.onBackPressed();
                 }
                 return true;
@@ -193,10 +189,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
         // For phone layouts
         if (!isTabletLayout) {
 
-            // Create a Fragment to contain results and pass it the query to search for.
             PlayerFragment playerFragment = new PlayerFragment();
 
-            // Swap this Fragment out with the new one.
+            // Swap old fragment out with the new one.
             transaction.replace(R.id.container, playerFragment, "PLAYER_FRAGMENT");
             transaction.addToBackStack(null);
             transaction.commit();
@@ -204,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
             // For Tablet Layouts
         } else {
 
+            // Display fragment on top of existing UI.
             DialogFragment playerFragment = new PlayerFragment();
             playerFragment.show(transaction, "PLAYER_FRAGMENT");
         }

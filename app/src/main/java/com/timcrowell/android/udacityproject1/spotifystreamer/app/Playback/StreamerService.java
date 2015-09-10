@@ -12,30 +12,25 @@ import android.util.Log;
 
 import java.io.IOException;
 
+/**
+ * A "dumb" Android service that forwards almost all logic to StreamerControl.
+ */
 public class StreamerService extends Service implements MediaPlayer.OnPreparedListener,
         MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
     private static final String TAG = StreamerService.class.getSimpleName();
 
     public StreamerService() {
-        Log.d(TAG, "Constructor called");
+        Log.d(TAG, "Starting Service.");
     }
 
     private MediaPlayer player;
-    private Playable playable;
 
     private IBinder playerBinder = new PlayerBinder();
 
     public void onCreate() {
         super.onCreate();
-
         player = new MediaPlayer();
-
-        initMusicPlayer();
-    }
-
-    public void initMusicPlayer() {
-        player.setWakeMode(getApplicationContext(),
-                PowerManager.PARTIAL_WAKE_LOCK);
+        player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         player.setOnPreparedListener(this);
         player.setOnCompletionListener(this);
@@ -49,8 +44,6 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
         }
         return super.onStartCommand(intent, flags, startId);
     }
-
-
 
     public class PlayerBinder extends Binder {
         StreamerService getService() {
@@ -72,20 +65,13 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
 
     public void setSong(Playable playable) {
         Log.d(TAG, "setSong() called.");
-
-        this.playable = playable;
-
         player.reset();
-
-
         Uri trackUri = Uri.parse(playable.getTrackUrl());
-
         try {
             player.setDataSource(getApplicationContext(), trackUri);
         } catch (IOException e) {
             Log.e(TAG, "Error setting data source", e);
         }
-
         Log.d(TAG, "Calling prepareAsync()");
         player.prepareAsync();
     }
@@ -115,13 +101,13 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
     @Override
     public void onCompletion(MediaPlayer mp) {
         Streamer streamer = Streamer.getInstance();
-        streamer.controller.notifyCompleted();
+        streamer.controller.onStreamerCompleted();
     }
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
         Streamer streamer = Streamer.getInstance();
-        streamer.monitor.refresh();
+        streamer.monitor.notifyObservers();
         Log.d(TAG, "OnError reached.");
         return false;
     }
@@ -131,9 +117,7 @@ public class StreamerService extends Service implements MediaPlayer.OnPreparedLi
         //start playback
         Log.d(TAG, "Informing the StreamerController we're ready.");
         Streamer streamer = Streamer.getInstance();
-        streamer.controller.onPlayerPrepared();
+        streamer.controller.onStreamerPrepared();
     }
-
-
 }
 

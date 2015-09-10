@@ -10,14 +10,15 @@ import android.util.Log;
 import java.nio.channels.NotYetBoundException;
 
 /**
- * Created by tscrowell on 8/22/15.
+ * This singleton class gets called by MainActivity when the app launches and sets up the bound service for music
+ * playback.  It also initializes all the other related streamer classes and holds reference to them.
  */
 public class Streamer {
     private static final String TAG = Streamer.class.getSimpleName();
 
     public StreamerService service;
     public StreamerControl controller;
-    public StreamerMonitor monitor = new StreamerMonitor(this);
+    public StreamerMonitor monitor = new StreamerMonitor();
     public StreamerNotification notification = new StreamerNotification(this);
 
     private Intent playIntent;
@@ -26,14 +27,11 @@ public class Streamer {
     private boolean serviceBound = false;
 
     private Streamer(Context context){
-        Log.d(TAG, "Made it to the constructor.");
         this.appContext = context;
 
         playIntent = new Intent(appContext, StreamerService.class);
         appContext.bindService(playIntent, playerConnection, Context.BIND_AUTO_CREATE);
         appContext.startService(playIntent);
-
-        Log.d(TAG, "Got to end of creating the constructor");
     }
 
     public static Streamer getInstance(Context context) {
@@ -45,7 +43,7 @@ public class Streamer {
 
     public static Streamer getInstance() throws NotYetBoundException {
         if (instance == null) {
-            Log.e(TAG, "Hit the fan.");
+            Log.d(TAG, "Streamer called before it was initialized.");
             return null;
         }
         return instance;

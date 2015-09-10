@@ -6,26 +6,22 @@ import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.Observer;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 /**
- * Created by tscrowell on 9/3/15.
+ * Observable that pings other classes when the state of StreamerControl changes.
  */
 public class StreamerMonitor implements Observable {
     private static final String TAG = StreamerMonitor.class.getSimpleName();
 
-    private Streamer streamer;
+    // WeakReferences are crucial to ensuring old Fragments and Activities get garbage-collected
+    // after orientation changes, etc.
     private ArrayList<WeakReference<Observer>> observers = new ArrayList<WeakReference<Observer>>();
-
-    private boolean isPlaying = false;
-    private boolean changed = false;
 
     private final Object MUTEX = new Object();
 
     @Override
     public void register(Observer observer) {
-        if (observer == null) { throw new NullPointerException("Null Observer Registered"); }
+        if (observer == null) { throw new NullPointerException("Attempted to register null Observer."); }
         synchronized (MUTEX) {
             if(!observers.contains(observer)) {
                 observers.add(new WeakReference<Observer>(observer));
@@ -40,13 +36,12 @@ public class StreamerMonitor implements Observable {
         }
     }
 
-
     @Override
     public void notifyObservers() {
+        Log.d(TAG, "Notifying Observers.");
         ArrayList<WeakReference<Observer>> mObservers = null;
         synchronized (MUTEX) {
             mObservers = new ArrayList<WeakReference<Observer>>(this.observers);
-            this.changed = false;
         }
         for (WeakReference<Observer> weakReferenceObserver : mObservers) {
 
@@ -54,37 +49,17 @@ public class StreamerMonitor implements Observable {
                 weakReferenceObserver.get().update();
             } else {
                 synchronized (MUTEX) {
-                    this.observers.remove(weakReferenceObserver);
+                    if (this.observers.contains(weakReferenceObserver)) {
+                        this.observers.remove(weakReferenceObserver);
+                    }
                 }
                 Log.d(TAG, "Removed garbage-collected Observer");
             }
 
         }
-        Log.d(TAG, "Observers Notified");
     }
 
-    @Override
-    public Object getUpdate(Observer observer) {
-        return null;
+    public StreamerMonitor() {
     }
-
-
-    public StreamerMonitor(Streamer streamer) {
-        this.streamer = streamer;
-    }
-
-    public void refresh() {
-//        boolean wasPlaying = isPlaying;
-//        boolean nowPlaying = streamer.service.isPlaying();
-//
-//        if (nowPlaying != wasPlaying) {
-//            this.isPlaying = nowPlaying;
-//            this.changed = true;
-//            Log.d(TAG, "Got changes");
-//            notifyObservers();
-//        }
-        notifyObservers();
-    }
-
 
 }
