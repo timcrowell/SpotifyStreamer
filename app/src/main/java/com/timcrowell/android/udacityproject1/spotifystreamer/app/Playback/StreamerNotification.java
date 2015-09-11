@@ -89,6 +89,9 @@ public class StreamerNotification implements Observer{
                         }
                     }
                 }.start();
+            } else {
+                // Kill existing notifications if the setting was unchecked.
+                remove();
             }
         }
     }
