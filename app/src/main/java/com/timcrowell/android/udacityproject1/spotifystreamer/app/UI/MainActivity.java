@@ -6,17 +6,24 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
+import com.timcrowell.android.udacityproject1.spotifystreamer.app.ListItem.TrackListItem;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Playback.Streamer;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.R;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.Observable;
 import com.timcrowell.android.udacityproject1.spotifystreamer.app.Util.Observer;
+import kaaes.spotify.webapi.android.models.TrackSimple;
+
+import java.util.Map;
 
 /**
  * This is a single activity app.  The various screens/layouts will be changed
@@ -34,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private Menu toolbarMenu;
     private Streamer streamer;
     private Observable streamerObservable;
+    private ShareActionProvider shareActionProvider;
 
     @Override
     public void setSubject(Observable subject) {
@@ -44,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
     @Override
     public void update() {
         if (toolbarMenu != null) {
-            MenuItem nowPlaying = toolbarMenu.findItem(R.id.nowPlaying);
 
+            MenuItem nowPlaying = toolbarMenu.findItem(R.id.nowPlaying);
             if ( isTabletLayout
                     || getSupportFragmentManager().findFragmentByTag("PLAYER_FRAGMENT") == null
                     || ! getSupportFragmentManager().findFragmentByTag("PLAYER_FRAGMENT").isVisible() )
@@ -53,6 +61,14 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 nowPlaying.setVisible(streamer.controller.isPlaying());
             } else {
                 nowPlaying.setVisible(false);
+            }
+
+            MenuItem shareButton = toolbarMenu.findItem((R.id.shareButton));
+            if (streamer.controller.isSongLoaded()) {
+                shareButton.setVisible(true);
+                shareActionProvider.setShareIntent(createShareIntent());
+            } else {
+                shareButton.setVisible(false);
             }
         }
     }
@@ -124,11 +140,36 @@ public class MainActivity extends AppCompatActivity implements Observer {
         getMenuInflater().inflate(R.menu.main_activity_actions, menu);
         toolbarMenu = menu;
 
+        // Locate MenuItem with ShareActionProvider
+        MenuItem shareButton = menu.findItem(R.id.shareButton);
+
+        // Fetch and store ShareActionProvider
+        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareButton);
+
         // Double-check Now-Playing after rotation
         streamer.monitor.notifyObservers();
         return true;
     }
 
+    private Intent createShareIntent() {
+
+        Map<String, String> trackUrls = ((TrackSimple) streamer.controller.getCurrentTrack().getModel()).external_urls;
+
+        if (trackUrls != null) {
+
+            String url = trackUrls.entrySet().iterator().next().getValue();
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Shared Track from Spotify Streamer.");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+            return shareIntent;
+
+        } else {
+
+            Log.d(TAG, "No External URL to share for current track.");
+            return null;
+        }
+    }
 
     @Override
     protected void onStart() {

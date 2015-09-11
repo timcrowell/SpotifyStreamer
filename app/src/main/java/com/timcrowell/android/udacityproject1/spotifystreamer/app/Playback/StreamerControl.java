@@ -18,7 +18,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
     private List<TrackListItem> playlist;
     private int songIndex = 0;
     private Playable currentSong;
-    private boolean songIsLoaded = false;
+    private boolean songLoaded = false;
     private boolean streamerIsPrepared = false;
     private boolean shouldPlay = false;
     private boolean isStopped = true;
@@ -140,8 +140,12 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
         // buffering and calls back to onStreamerPrepared
         streamerIsPrepared = false;
 
-        songIsLoaded = true;
+        songLoaded = true;
         streamer.monitor.notifyObservers();
+    }
+
+    public boolean isSongLoaded(){
+        return songLoaded;
     }
 
     @Override
@@ -215,8 +219,8 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
     public void start() {
         Log.d(TAG, "Start called.");
         Log.d(TAG, "ShouldPlay: " + shouldPlay + " IsStopped: " + isStopped + " PlayerIsPreppared: " + streamerIsPrepared +
-                " isPlaying: " + streamer.service.isPlaying() + " songIsLoaded: " + songIsLoaded);
-        if(songIsLoaded) {
+                " isPlaying: " + streamer.service.isPlaying() + " songLoaded: " + songLoaded);
+        if(songLoaded) {
             shouldPlay = true;
             isStopped = false;
             if (streamerIsPrepared) {
@@ -238,7 +242,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
 
     @Override
     public int getDuration() {
-        if (songIsLoaded && streamerIsPrepared) {
+        if (songLoaded && streamerIsPrepared) {
             return streamer.service.getDuration();
         } else {
             return 0;
@@ -256,7 +260,7 @@ public class StreamerControl implements MediaController.MediaPlayerControl, Play
 
     @Override
     public void seekTo(int i) {
-        if (songIsLoaded && streamerIsPrepared && streamer.service.getPosition() != i) {
+        if (songLoaded && streamerIsPrepared && streamer.service.getPosition() != i) {
             streamer.service.seek(i);
         }
     }
