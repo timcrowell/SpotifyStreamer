@@ -122,7 +122,6 @@ public abstract class SpotifySearch implements SpotifyListAdapterProvider {
             Log.d(TAG, "Playlist is Null");
         } else {
             listAdapter.setPlaylistItems(playlist);
-            Log.d(TAG, "Playlist is not null.");
         }
     }
 

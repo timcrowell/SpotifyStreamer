@@ -30,13 +30,9 @@ public class SpotifyListAdapter extends ArrayAdapter<SpotifyListItem> {
         this.playListItems = items;
         if (playListItems == null) {
             Log.d(TAG, "setplaylistitems() Playlist is null.");
-        } else {
-            Log.d(TAG, "setplaylistitems() Playlist is not null.");
         }
         if (items == null) {
             Log.d(TAG, "setplaylistitems() ITEMS is null.");
-        } else {
-            Log.d(TAG, "setplaylistitems() ITEMS is not null.");
         }
     }
 
